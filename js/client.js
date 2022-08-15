@@ -32,7 +32,7 @@ socket.on("user-joined", (name) => {
   append(`${name} joined the chat`, "right");
 });
 
-//* When a sends the message, rceive it
+//* When a sends the message, receive it
 socket.on("receive", (data) => {
   append(`${data.name}: ${data.message}`, "left");
 });
