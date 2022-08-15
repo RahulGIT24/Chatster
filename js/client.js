@@ -9,14 +9,6 @@ const messageContainer = document.querySelector(".container");
 var audio = new Audio("audio/sound.mp3"); //* Audio that will play on sending Messages
 var audio2 = new Audio("audio/sound2.mp3"); //* Audio that will play on receiving Messages
 
-//* If the form gets submitted, send server the message
-form.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const message = messageInput.value;
-  append(`You: ${message}`, "right");
-  socket.emit("send", message);
-  messageInput.value = "";
-});
 
 const append = (message, position) => {
   const messageElement = document.createElement("div");
@@ -48,4 +40,13 @@ socket.on("receive", (data) => {
 //* When a user leaves the chat
 socket.on("left", (name) => {
   append(`${name} left the chat`, "right");
+});
+
+//* If the form gets submitted, send server the message
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const message = messageInput.value;
+  append(`You: ${message}`, "right");
+  socket.emit("send", message);
+  messageInput.value = "";
 });
