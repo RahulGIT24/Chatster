@@ -8,8 +8,7 @@ const Chat = () => {
 
   // Hitting api from axios
   const fetchChats = async()=>{
-    const {data} = await axios.get('/api/chat')
-    setChats(data)
+    
   }
 
   // Fetching data

@@ -4,11 +4,13 @@ const dotenv = require("dotenv");
 const User = require("../models/UserModel")
 const bcrypt = require('bcryptjs')
 const jwt = require("jsonwebtoken");
+const OTP = require("../models/OTP")
+const nodemailer = require("nodemailer");
 
 const router = express.Router()
 
 dotenv.config()
-const JWT_SECRET = "ChatApp123";
+const JWT_SECRET = process.env.KEY;
 
 // ROUTE 1: Creating a user
 router.post("/createuser", [
@@ -102,6 +104,136 @@ router.post("/login", [
     } catch (error) {
         console.log(error);
         res.status(500).send("Internal Server Error"); // In case of errors
+    }
+}
+)
+
+// Send email to user who forgot his password
+router.post("/email-send", [
+    // Validating email and password
+    body("email", "Enter a valid email").isEmail(),
+], async (req, res) => {
+    let success = false;
+    // If there are errors, return Bad request and the errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    // Destructuring email and password from body
+    const { email } = req.body;
+
+    try {
+        let isUserExist = await User.findOne({ email });
+
+        if (!isUserExist) {
+            res.status(400).json({ success, error: "Sorry you are not registered to ChatoPedia" })
+        }
+
+        const randomNumber = Math.floor(Math.random() * 100000000);
+
+        const otpSend = randomNumber.toString().substring(2, 8);
+
+        // Hasing OTP
+        const salt = await bcrypt.genSalt(10);
+
+        const otpStore = new OTP({
+            email,
+            code: await bcrypt.hash(otpSend, salt),
+            expiryTime: new Date().getTime() + 300 * 1000
+        })
+
+        await otpStore.save();
+
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: process.env.MAIL,
+                pass: process.env.PASS
+            }
+        });
+
+        const mailOptions = {
+            from: process.env.MAIL,
+            to: email,
+            subject: 'One Time Password of ChatoPedia',
+            text: `We think you have requested for reset password. Here's your OTP ${otpSend}.`
+        };
+
+        await transporter.sendMail(mailOptions);
+
+        success = true;
+        res.status(200).json({ success, msg: "Please check your Email ID" })
+    } catch (e) {
+        res.status(400).json({ success, error: "Internal Server Error Occured" })
+    }
+}
+)
+
+// Validating OTP
+router.post("/validateOTP", [
+    // Validating email and password
+    body("email", "Enter a valid email").isEmail(),
+], async (req, res) => {
+    let success = false;
+    // If there are errors, return Bad request and the errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    // Destructuring email and password from body
+    const { email, Obtainedotp } = req.body;
+
+    try {
+        const user = await OTP.findOne({ email });
+
+        const otpcompare = await bcrypt.compare(Obtainedotp, user.code)
+
+        if (otpcompare) {
+            success = true;
+            res.status(200).json({ success, msg: "Validated Successfully" })
+        } else {
+            res.status(401).json({ success, msg: "Incorrect OTP" })
+        }
+
+
+    } catch (e) {
+        res.status(500).json({ success, error: "Internal Server Error Occured" })
+    }
+}
+)
+
+// Changing Password
+router.post("/changePassword", [
+    // Validating email and password
+    body("email", "Enter a valid email").isEmail(),
+], async (req, res) => {
+    let success = false;
+    // If there are errors, return Bad request and the errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    // Destructuring email and password from body
+    const { email, password } = req.body;
+
+    try {
+        const user = await User.findOne({ email });
+
+        // Hasing Password
+        const salt = await bcrypt.genSalt(10);
+        const secpass = await bcrypt.hash(password, salt)
+
+        // Create a new document that contains the updated email address
+        user.password = secpass;
+        await user.save();
+
+        success = true;
+        res.status(200).json({ success, msg: "Password Updated" })
+    } catch (e) {
+        res.status(500).json({ success, error: "Internal Server Error Occured" })
     }
 }
 )

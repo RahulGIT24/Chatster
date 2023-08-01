@@ -136,11 +136,7 @@ const SignUp = () => {
   };
 
   const handleClick = () => {
-    if (show === false) {
-      setShow(true);
-    } else {
-      setShow(false);
-    }
+    setShow(!show)
   };
 
   return (

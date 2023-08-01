@@ -5,14 +5,15 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  Text,
   VStack,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useToast } from "@chakra-ui/react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-const Login = () => {
+const SignUp = () => {
   const navigate = useNavigate();
   let toast = useToast();
   const [Loading, setLoading] = useState(false);
@@ -22,10 +23,8 @@ const Login = () => {
     password: "",
   });
 
-  const [pic, setPic] = useState();
-
   // Destructuring form data
-  const { name, email, password } = formData;
+  const {email, password } = formData;
 
   const [show, setShow] = useState(false);
 
@@ -84,20 +83,19 @@ const Login = () => {
       });
       setLoading(false);
     }
-    // console.log(email,password)
   };
 
   const handleClick = () => {
-    setShow(!show);
+    setShow(!show)
   };
 
   return (
     <VStack spacing={"5px"}>
-      <FormControl id="Loginemail" isRequired>
+      <FormControl id="email" isRequired>
         <FormLabel>Email</FormLabel>
         <Input placeholder="Enter your Email Address" onChange={onChange} />
       </FormControl>
-      <FormControl id="Loginpassword" isRequired>
+      <FormControl id="password" isRequired>
         <FormLabel>Password</FormLabel>
         <InputGroup>
           <Input
@@ -112,6 +110,7 @@ const Login = () => {
           </InputRightElement>
         </InputGroup>
       </FormControl>
+      <Text id="forgotPass"><Link to={"/forgotPassword"}>Forgot Password</Link></Text>
       <Button
         colorScheme="blue"
         width={"100%"}
@@ -125,4 +124,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default SignUp;
