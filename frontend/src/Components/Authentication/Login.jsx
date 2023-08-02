@@ -24,7 +24,7 @@ const SignUp = () => {
   });
 
   // Destructuring form data
-  const {email, password } = formData;
+  const { email, password } = formData;
 
   const [show, setShow] = useState(false);
 
@@ -74,7 +74,7 @@ const SignUp = () => {
       navigate("/chats");
     } catch (error) {
       toast({
-        title: "Error Occured!",
+        title: "Invalid Credentials",
         description: error.response.data.message,
         status: "error",
         duration: 5000,
@@ -86,7 +86,7 @@ const SignUp = () => {
   };
 
   const handleClick = () => {
-    setShow(!show)
+    setShow(!show);
   };
 
   return (
@@ -110,7 +110,9 @@ const SignUp = () => {
           </InputRightElement>
         </InputGroup>
       </FormControl>
-      <Text id="forgotPass"><Link to={"/forgotPassword"}>Forgot Password</Link></Text>
+      <Text id="forgotPass">
+        <Link to={"/forgotPassword"}>Forgot Password</Link>
+      </Text>
       <Button
         colorScheme="blue"
         width={"100%"}

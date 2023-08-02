@@ -125,9 +125,15 @@ router.post("/email-send", [
 
     try {
         let isUserExist = await User.findOne({ email });
+        let previousOTP = await OTP.findOne({email});
 
+        
         if (!isUserExist) {
             res.status(400).json({ success, error: "Sorry you are not registered to ChatoPedia" })
+        }
+        
+        if(previousOTP){
+            await OTP.deleteOne({email});
         }
 
         const randomNumber = Math.floor(Math.random() * 100000000);
@@ -175,6 +181,7 @@ router.post("/validateOTP", [
     // Validating email and password
     body("email", "Enter a valid email").isEmail(),
 ], async (req, res) => {
+    let currentTime = new Date().getTime();
     let success = false;
     // If there are errors, return Bad request and the errors
     const errors = validationResult(req);
@@ -188,7 +195,13 @@ router.post("/validateOTP", [
     try {
         const user = await OTP.findOne({ email });
 
-        const otpcompare = await bcrypt.compare(Obtainedotp, user.code)
+        // Checking expiry time of OTP
+        let diff = user.expiryTime
+        if (diff < 0) {
+            res.status(400).json({ success, error: "OTP Expired" })
+        }
+
+        const otpcompare = bcrypt.compare(Obtainedotp, user.code)
 
         if (otpcompare) {
             success = true;
