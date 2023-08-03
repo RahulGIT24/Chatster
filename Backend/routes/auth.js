@@ -6,6 +6,7 @@ const bcrypt = require('bcryptjs')
 const jwt = require("jsonwebtoken");
 const OTP = require("../models/OTP")
 const nodemailer = require("nodemailer");
+const generateToken = require("../config/generateToken")
 
 const router = express.Router()
 
@@ -45,17 +46,11 @@ router.post("/createuser", [
                 pic: req.body.pic
             })
 
-            const data = {
-                user: {
-                    id: user.id
-                }
-            }
-
             // Signing JWT Key
-            const authtoken = jwt.sign(data, JWT_SECRET);
+            const token = generateToken(user.id)
             success = true;
             // Sending authtoken in response
-            res.json({ success, authtoken });
+            res.json({ success, token });
         } catch (e) {
             console.error(e.message);
             res.status(500).send("Internal Server Error"); // In case of errors
@@ -92,15 +87,9 @@ router.post("/login", [
             return res.status(400).json({ success, error: "Please try to login with correct credentials" })
         }
 
-        const data = {
-            user: {
-                id: user.id,
-            }
-        }
-
-        const authtoken = jwt.sign(data, JWT_SECRET);
+        const token = generateToken(user.id)
         success = true;
-        res.json({ success, authtoken });
+        res.json({ success, token });
     } catch (error) {
         console.log(error);
         res.status(500).send("Internal Server Error"); // In case of errors
@@ -125,15 +114,15 @@ router.post("/email-send", [
 
     try {
         let isUserExist = await User.findOne({ email });
-        let previousOTP = await OTP.findOne({email});
+        let previousOTP = await OTP.findOne({ email });
 
-        
+
         if (!isUserExist) {
             res.status(400).json({ success, error: "Sorry you are not registered to ChatoPedia" })
         }
-        
-        if(previousOTP){
-            await OTP.deleteOne({email});
+
+        if (previousOTP) {
+            await OTP.deleteOne({ email });
         }
 
         const randomNumber = Math.floor(Math.random() * 100000000);
