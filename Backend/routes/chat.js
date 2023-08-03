@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose')
 const protect = require('../middleware/authMiddleWare');
 const Chat = require("../models/ChatModel")
 const User = require('../models/UserModel');
@@ -30,7 +31,7 @@ router.post("/", protect, async (req, res) => {
         })
 
         if (isChat.length > 0) {
-            res.send(isChat[0])
+            return res.status(200).send(isChat[0])
         } else {
             const chatData = {
                 chatName: "sender",
@@ -77,7 +78,7 @@ router.post("/group", protect, async (req, res) => {
                 groupAdmin: req.user
             })
 
-            const fullGroupChat = await Chat.findOne({_id: groupChat._id}).populate("users","-password").populate("groupAdmin","-password")
+            const fullGroupChat = await Chat.findOne({ _id: groupChat._id }).populate("users", "-password").populate("groupAdmin", "-password")
 
             res.status(200).send(fullGroupChat)
         } catch (error) {
@@ -95,6 +96,14 @@ router.get("/group", protect, async (req, res) => {
 })
 
 router.put("/rename", protect, async (req, res) => {
+    try {
+        const { chatID, chatName } = req.body;
+
+        const updatedChat = await Chat.findByIdAndUpdate(chatID, { chatName: chatName }, { new: true }).populate("users","-password").populate("groupAdmin","-password")
+        res.status(200).send(updatedChat);
+    } catch (e) {
+        res.status(400).send("Couldn't Update")
+    }
 
 })
 
