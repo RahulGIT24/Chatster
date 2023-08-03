@@ -91,15 +91,11 @@ router.post("/group", protect, async (req, res) => {
     }
 })
 
-router.get("/group", protect, async (req, res) => {
-
-})
-
 router.put("/rename", protect, async (req, res) => {
     try {
         const { chatID, chatName } = req.body;
 
-        const updatedChat = await Chat.findByIdAndUpdate(chatID, { chatName: chatName }, { new: true }).populate("users","-password").populate("groupAdmin","-password")
+        const updatedChat = await Chat.findByIdAndUpdate(chatID, { chatName: chatName }, { new: true }).populate("users", "-password").populate("groupAdmin", "-password")
         res.status(200).send(updatedChat);
     } catch (e) {
         res.status(400).send("Couldn't Update")
@@ -108,11 +104,35 @@ router.put("/rename", protect, async (req, res) => {
 })
 
 router.put("/groupRemove", protect, async (req, res) => {
+    try{
+        const {chatId, userId} = req.body;
+        const removed = await Chat.findByIdAndUpdate(chatId,{
+            $pull:{users:userId},
+        },
+        {
+            new: true,
+        }
+        ).populate("users","-password").populate("groupAdmin","-password")
 
+        res.status(200).send(removed)
+    }catch(e){
+        console.log(e)
+        res.status(400).send("Error while removing user")
+    }
 })
 
 router.put("/groupAdd", protect, async (req, res) => {
+    try{
+    const { chatId, userId } = req.body;
+  
+    const added = await Chat.findByIdAndUpdate(chatId,{$push: { users: userId },},{new: true,})
+      .populate("users", "-password")
+      .populate("groupAdmin", "-password");
 
+    res.status(200).send(added)
+    }catch(e){
+        res.status(400).send("Error while adding new user!")
+    }
 })
 
 module.exports = router;
