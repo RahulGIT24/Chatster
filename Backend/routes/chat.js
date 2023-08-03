@@ -1,5 +1,4 @@
 const express = require('express');
-const mongoose = require('mongoose')
 const protect = require('../middleware/authMiddleWare');
 const Chat = require("../models/ChatModel")
 const User = require('../models/UserModel');
