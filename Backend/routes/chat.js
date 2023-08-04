@@ -6,7 +6,22 @@ const User = require('../models/UserModel');
 const router = express.Router();
 
 router.get("/", protect, async (req, res) => {
-
+    try {
+        Chat.find({ users: { $elemMatch: { $eq: req.user._id } } })
+            .populate("users", "-password")
+            .populate("groupAdmin", "-password")
+            .populate("latestMessage")
+            .sort({ updatedAt: -1 })
+            .then(async (results) => {
+                results = await User.populate(results, {
+                    path: "latestMessage.sender",
+                    select: "name pic email",
+                });
+                res.status(200).send(results);
+            });
+    } catch (e) {
+        return res.status(400).send("Error Ocuured")
+    }
 })
 
 router.post("/", protect, async (req, res) => {
@@ -103,33 +118,33 @@ router.put("/rename", protect, async (req, res) => {
 })
 
 router.put("/groupRemove", protect, async (req, res) => {
-    try{
-        const {chatId, userId} = req.body;
-        const removed = await Chat.findByIdAndUpdate(chatId,{
-            $pull:{users:userId},
+    try {
+        const { chatId, userId } = req.body;
+        const removed = await Chat.findByIdAndUpdate(chatId, {
+            $pull: { users: userId },
         },
-        {
-            new: true,
-        }
-        ).populate("users","-password").populate("groupAdmin","-password")
+            {
+                new: true,
+            }
+        ).populate("users", "-password").populate("groupAdmin", "-password")
 
         res.status(200).send(removed)
-    }catch(e){
+    } catch (e) {
         console.log(e)
         res.status(400).send("Error while removing user")
     }
 })
 
 router.put("/groupAdd", protect, async (req, res) => {
-    try{
-    const { chatId, userId } = req.body;
-  
-    const added = await Chat.findByIdAndUpdate(chatId,{$push: { users: userId },},{new: true,})
-      .populate("users", "-password")
-      .populate("groupAdmin", "-password");
+    try {
+        const { chatId, userId } = req.body;
 
-    res.status(200).send(added)
-    }catch(e){
+        const added = await Chat.findByIdAndUpdate(chatId, { $push: { users: userId }, }, { new: true, })
+            .populate("users", "-password")
+            .populate("groupAdmin", "-password");
+
+        res.status(200).send(added)
+    } catch (e) {
         res.status(400).send("Error while adding new user!")
     }
 })
