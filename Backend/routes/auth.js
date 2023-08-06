@@ -51,6 +51,7 @@ router.post("/createuser", [
             success = true;
             // Sending authtoken in response
             const sendUser = {
+                id: user.id,
                 name:user.name,
                 email: user.email,
                 pic: user.pic,
@@ -96,6 +97,7 @@ router.post("/login", [
         const token = generateToken(user.id)
         success = true;
         const sendUser = {
+            id: user.id,
             name:user.name,
             email: user.email,
             pic: user.pic,
