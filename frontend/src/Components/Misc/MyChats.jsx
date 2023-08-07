@@ -4,9 +4,9 @@ import { Box, Button, Stack, Text, useToast } from "@chakra-ui/react";
 import axios from "axios";
 import { AddIcon } from "@chakra-ui/icons";
 import ChatLoading from "./ChatLoading";
-import { getSender }  from "../../config/ChatLogics";
+import { getSender } from "../../config/ChatLogics";
 
-const MyChats = ({fetchAgain, setFetchAgain}) => {
+const MyChats = ({ fetchAgain, setFetchAgain }) => {
   const [loggedUser, setLoggedUser] = useState();
   const toast = useToast();
 
@@ -78,27 +78,31 @@ const MyChats = ({fetchAgain, setFetchAgain}) => {
         borderRadius={"lg"}
         overflow={"hidden"}
       >
-        {chats?(
+        {chats ? (
           <Stack overflowY="scroll">
-            {chats.map((chat)=>{
-             return  <Box
-              onClick={()=> setSelectedChat(chat)}
-              cursor={"pointer"}
-              color={SelectedChat === chat? "white":"black"}
-              bg={SelectedChat === chat? "#3882AC":"#E8E8E8"}
-              px={3}
-              py={2}
-              borderRadius={"lg"}
-              key={chat._id}
-              >
-                <Text>
-                  {!chat.isGroupChat?getSender(loggedUser, chat.users, setFetchAgain):(chat.chatName)}
-                </Text>
-              </Box>
+            {chats.map((chat) => {
+              return (
+                <Box
+                  onClick={() => setSelectedChat(chat)}
+                  cursor={"pointer"}
+                  color={SelectedChat === chat ? "white" : "black"}
+                  bg={SelectedChat === chat ? "#3882AC" : "#E8E8E8"}
+                  px={3}
+                  py={2}
+                  borderRadius={"lg"}
+                  key={chat._id}
+                >
+                  <Text>
+                    {!chat.isGroupChat
+                      ? getSender(loggedUser, chat.users, setFetchAgain)
+                      : chat.chatName}
+                  </Text>
+                </Box>
+              );
             })}
           </Stack>
-        ):(
-          <ChatLoading/>
+        ) : (
+          <ChatLoading />
         )}
       </Box>
     </Box>

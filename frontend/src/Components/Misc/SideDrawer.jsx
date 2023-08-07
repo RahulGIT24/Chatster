@@ -79,30 +79,30 @@ const SideDrawer = () => {
   };
 
   const accessChat = async (userID) => {
+    console.log(userID);
+
     try {
       setLoadingChat(true);
       const config = {
-        headers:{
-          'Content-type':'application/json',
-          Authorization:`Bearer ${user.sendUser.token}`
-        }
-      }
-      const data = await axios.post("/api/chat",{userID}, config)
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${user.sendUser.token}`,
+        },
+      };
+      const { data } = await axios.post(`/api/chat`, { userID }, config);
 
-      if(!chats.find((c)=>c._id === data._id)){
-        setChats([data,...chats])
-      }
-
-      setSelectedChat(data)
-      setLoadingChat(false)
-      onClose()
+      if (!chats.find((c) => c._id === data._id)) setChats([data, ...chats]);
+      setSelectedChat(data);
+      setLoadingChat(false);
+      onClose();
     } catch (error) {
-      setLoading(false);
-      return toast({
-        title: "Error ocuured failed to fetch chats",
+      toast({
+        title: "Error fetching the chat",
+        description: error.message,
         status: "error",
-        duration: 9000,
+        duration: 5000,
         isClosable: true,
+        position: "bottom-left",
       });
     }
   };
@@ -186,7 +186,6 @@ const SideDrawer = () => {
                 );
               })
             )}
-            
           </DrawerBody>
         </DrawerContent>
       </Drawer>
