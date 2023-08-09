@@ -75,9 +75,14 @@ router.post("/group", protect, async (req, res) => {
         }
 
         var users = JSON.parse(req.body.users);
+
         if (users.length < 2) {
-            return res.status(400).send("At least two people are required in chat")
+          return res
+            .status(400)
+            .send("More than 2 users are required to form a group chat");
         }
+      
+        users.push(req.user);
         try {
             const groupChat = await Chat.create({
                 chatName: req.body.name,
