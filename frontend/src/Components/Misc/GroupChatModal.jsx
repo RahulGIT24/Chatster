@@ -63,6 +63,7 @@ const GroupChatModal = ({ children }) => {
     }
   };
 
+  // TODO
   const handleSubmit = async () => {
     if (!groupChatName || !selectedUsers) {
       toast({
@@ -81,17 +82,16 @@ const GroupChatModal = ({ children }) => {
           Authorization: `Bearer ${user.sendUser.token}`,
         },
       };
-
       const { data } = await axios.post(
-        "/api/chat/group",
+        `/api/chat/group`,
         {
           name: groupChatName,
-          users: JSON.stringify(selectedUsers.map((u) => u.id)),
+          users: JSON.stringify(selectedUsers.map((u) => u._id)),
         },
         config
       );
-
-      
+      setChats([data, ...chats]);
+    
       onClose();
       toast({
         title: "New Group Chat Created!",
@@ -101,8 +101,7 @@ const GroupChatModal = ({ children }) => {
         position: "bottom",
       });
     } catch (error) {
-        console.log(error)
-      return toast({
+      toast({
         title: "Failed to Create the Chat!",
         description: error.response.data,
         status: "error",
