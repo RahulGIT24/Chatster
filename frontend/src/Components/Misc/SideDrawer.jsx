@@ -147,7 +147,7 @@ const SideDrawer = () => {
               />
             </MenuButton>
             <MenuList>
-              <ProfileModal user={user}>
+              <ProfileModal user={user.sendUser}>
                 <MenuItem>My Profile</MenuItem>
               </ProfileModal>
               <MenuDivider />

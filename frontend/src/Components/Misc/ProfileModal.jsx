@@ -2,7 +2,7 @@ import { Button, IconButton } from "@chakra-ui/button";
 import { useDisclosure } from "@chakra-ui/hooks";
 import { ViewIcon } from "@chakra-ui/icons";
 import { Image } from "@chakra-ui/image";
-import { Center, Text } from "@chakra-ui/layout";
+import { Text } from "@chakra-ui/layout";
 import {
   Modal,
   ModalBody,
@@ -13,7 +13,6 @@ import {
   ModalOverlay,
 } from "@chakra-ui/modal";
 import React from "react";
-import { useNavigate } from "react-router";
 
 const ProfileModal = ({ user, children }) => {
 
@@ -25,7 +24,7 @@ const ProfileModal = ({ user, children }) => {
       ) : (
         <IconButton
           onClick={onOpen}
-          display={{ base: "flex" }}
+          display={{ base: "flex"}}
           icon={<ViewIcon />}
         />
       )}
@@ -33,7 +32,7 @@ const ProfileModal = ({ user, children }) => {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader textAlign={"center"}>{user.sendUser.name}</ModalHeader>
+          <ModalHeader textAlign={"center"}>{user.name}</ModalHeader>
           <ModalCloseButton />
           <ModalBody
             display={"flex"}
@@ -44,11 +43,11 @@ const ProfileModal = ({ user, children }) => {
             <Image
               borderRadius={"full"}
               boxSize={"150px"}
-              src={user.sendUser.pic}
-              alt={user.sendUser.name}
+              src={user.pic}
+              alt={user.name}
             />
 
-            <Text fontSize={"2xl"}><b>{user.sendUser.email}</b></Text>
+            <Text fontSize={"2xl"}><b>{user.email}</b></Text>
           </ModalBody>
           <ModalFooter>
             <Button colorScheme="blue" mr={3} onClick={onClose}>

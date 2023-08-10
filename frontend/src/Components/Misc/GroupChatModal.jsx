@@ -63,7 +63,6 @@ const GroupChatModal = ({ children }) => {
     }
   };
 
-  // TODO
   const handleSubmit = async () => {
     if (!groupChatName || !selectedUsers) {
       toast({
