@@ -50,7 +50,14 @@ router.post("/createuser", [
             const token = generateToken(user.id)
             success = true;
             // Sending authtoken in response
-            res.json({ success, token });
+            const sendUser = {
+                id: user.id,
+                name:user.name,
+                email: user.email,
+                pic: user.pic,
+                token
+            }
+            res.json({ sendUser, success });
         } catch (e) {
             console.error(e.message);
             res.status(500).send("Internal Server Error"); // In case of errors
@@ -89,7 +96,14 @@ router.post("/login", [
 
         const token = generateToken(user.id)
         success = true;
-        res.json({ success, token });
+        const sendUser = {
+            id: user.id,
+            name:user.name,
+            email: user.email,
+            pic: user.pic,
+            token
+        }
+        res.json({sendUser, success});
     } catch (error) {
         console.log(error);
         res.status(500).send("Internal Server Error"); // In case of errors
