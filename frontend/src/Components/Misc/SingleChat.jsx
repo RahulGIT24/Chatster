@@ -121,7 +121,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             />
             {SelectedChat.isGroupChat === false ? (
               <>
-                {getSender(user, SelectedChat.users, setFetchAgain)}
+                {getSender(user, SelectedChat.users, setFetchAgain, fetchAgain)}
                 {console.log(SelectedChat.users[0]._id)}
                 {console.log(user.sendUser.id)}
                 <ProfileModal user={SelectedChat.users[0]._id == user.sendUser.id ? SelectedChat.users[1]: SelectedChat.users[0]} />

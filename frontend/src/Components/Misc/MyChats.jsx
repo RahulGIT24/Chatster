@@ -97,7 +97,7 @@ const MyChats = ({ fetchAgain, setFetchAgain }) => {
                 >
                   <Text>
                     {!chat.isGroupChat
-                      ? getSender(loggedUser, chat.users, setFetchAgain)
+                      ? getSender(loggedUser, chat.users, setFetchAgain, fetchAgain)
                       : chat.chatName}
                   </Text>
                 </Box>
