@@ -4,6 +4,7 @@ import { Box, IconButton, Text } from "@chakra-ui/react";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import { getSender } from "../../config/ChatLogics";
 import ProfileModal from "./ProfileModal";
+import UpdateGroupChatModal from "./UpdateGroupChatModal";
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const { user, SelectedChat, setSelectedChat } = ChatState();
@@ -29,22 +30,32 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 setSelectedChat("");
               }}
             />
-            {SelectedChat.isGroupChat === true? (
+            {SelectedChat.isGroupChat === false ? (
               <>
-                {SelectedChat.chatName.toUpperCase()}
-                {/* <UpdateGroupChatModal
-                  fetchAgain={fetchAgain}
-                  setFetchAgain={setFetchAgain}
-                /> */}
+                {getSender(user, SelectedChat.users, setFetchAgain)}
+                <ProfileModal user={SelectedChat.users[1]} />
               </>
             ) : (
               <>
-                {getSender(user, SelectedChat.users, setFetchAgain)}
-                {/* // TODO */}
-                <ProfileModal user={SelectedChat.users[1]}/>
+                {SelectedChat.chatName.toUpperCase()}
+                <UpdateGroupChatModal
+                  fetchAgain={fetchAgain}
+                  setFetchAgain={setFetchAgain}
+                />
               </>
             )}
           </Text>
+          <Box 
+          display={"flex"}
+          flexDirection={"column"}
+          bg={"#E8E8E8"}
+          w={"100%"}
+          h={"100%"}
+          borderRadius={"lg"}
+          overflow={"hidden"}
+          >
+                {/* Messages here */}
+          </Box>
         </>
       ) : (
         <Box
