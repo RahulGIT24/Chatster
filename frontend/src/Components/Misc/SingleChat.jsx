@@ -14,6 +14,7 @@ import ProfileModal from "./ProfileModal";
 import UpdateGroupChatModal from "./UpdateGroupChatModal";
 import { useToast } from "@chakra-ui/react";
 import axios from "axios";
+import ScrollableChat from "./ScrollableChat";
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const toast = useToast();
@@ -157,7 +158,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               />
             ) : (
               <>
-                <div>{/* Messages */}</div>
+                 <div className="messages">
+                <ScrollableChat messages={messages} />
+              </div>
               </>
             )}
             <FormControl onKeyDown={sendMessage} isRequired mt={3}>
