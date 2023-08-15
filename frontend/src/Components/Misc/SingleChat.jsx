@@ -15,6 +15,10 @@ import UpdateGroupChatModal from "./UpdateGroupChatModal";
 import { useToast } from "@chakra-ui/react";
 import axios from "axios";
 import ScrollableChat from "./ScrollableChat";
+import io from "socket.io-client";
+
+const ENDPOINT = "http://localhost:5000";
+var socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const toast = useToast();
@@ -22,6 +26,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState();
+  const [socketConnected, setSocketConnected] = useState(false);
 
   const fetchMessages = async () => {
     if (!SelectedChat) return;
@@ -40,8 +45,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       );
 
       setMessages(data);
-
       setLoading(false);
+      socket.emit("join chat", SelectedChat._id);
     } catch (e) {
       toast({
         title: "Unable to fetch messages",
@@ -53,10 +58,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       return;
     }
   };
-
-  useEffect(() => {
-    fetchMessages();
-  }, [SelectedChat]);
 
   const sendMessage = async (e) => {
     if (e.key === "Enter" && newMessage) {
@@ -70,7 +71,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         setNewMessage("");
 
         const { data } = await axios.post(
-          `/api/message`,
+          `/api/message/`,
           {
             content: newMessage,
             chatId: SelectedChat._id,
@@ -78,6 +79,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           config
         );
 
+        socket.emit("new message", data);
         setMessages([...messages, data]);
       } catch (error) {
         toast({
@@ -91,6 +93,31 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       }
     }
   };
+
+  useEffect(() => {
+    socket = io(ENDPOINT);
+    socket.emit("setup", user);
+    socket.on("connected", () => setSocketConnected(true));
+  }, []);
+
+  useEffect(() => {
+    fetchMessages();
+
+    selectedChatCompare = SelectedChat;
+  }, [SelectedChat]);
+
+  useEffect(() => {
+    socket.on("message recieved", (newMessageRecieved) => {
+      if (
+        !selectedChatCompare ||
+        selectedChatCompare._id !== newMessageRecieved.chat._id
+      ) {
+        // notification
+      } else {
+        setMessages([...messages, newMessageRecieved]);
+      }
+    });
+  });
 
   const typingHandler = (e) => {
     setNewMessage(e.target.value);
@@ -121,7 +148,13 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             {SelectedChat.isGroupChat === false ? (
               <>
                 {getSender(user, SelectedChat.users, setFetchAgain, fetchAgain)}
-                <ProfileModal user={SelectedChat.users[0]._id == user.sendUser.id ? SelectedChat.users[1]: SelectedChat.users[0]} />
+                <ProfileModal
+                  user={
+                    SelectedChat.users[0]._id === user.sendUser.id
+                      ? SelectedChat.users[1]
+                      : SelectedChat.users[0]
+                  }
+                />
               </>
             ) : (
               <>
@@ -154,9 +187,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               />
             ) : (
               <>
-                 <div className="messages">
-                <ScrollableChat messages={messages} />
-              </div>
+                <div className="messages">
+                  <ScrollableChat messages={messages} />
+                </div>
               </>
             )}
             <FormControl onKeyDown={sendMessage} isRequired mt={3}>
