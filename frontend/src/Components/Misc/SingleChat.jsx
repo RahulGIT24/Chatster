@@ -16,6 +16,7 @@ import { useToast } from "@chakra-ui/react";
 import axios from "axios";
 import ScrollableChat from "./ScrollableChat";
 import io from "socket.io-client";
+import Typing from "./Typing";
 
 const ENDPOINT = "http://localhost:5000";
 var socket, selectedChatCompare;
@@ -62,8 +63,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   };
 
   const sendMessage = async (e) => {
-    socket.emit('stop typing', SelectedChat._id)
     if (e.key === "Enter" && newMessage) {
+      socket.emit('stop typing', SelectedChat._id)
       try {
         const config = {
           headers: {
@@ -127,21 +128,22 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const typingHandler = (e) => {
     setNewMessage(e.target.value);
     
-    if(!socketConnected) return;
+    if (!socketConnected) return;
 
-    if(!typing){
+    if (!typing) {
       setTyping(true);
-      socket.emit('typing', SelectedChat._id)
+      socket.emit("typing", SelectedChat._id);
     }
+
+    console.log(SelectedChat._id)
 
     let lastTypingTime = new Date().getTime();
     let timerLength = 3000;
-
     setTimeout(() => {
       let timeNow = new Date().getTime();
-      let timeDifference = timeNow - lastTypingTime;
-      if(timeDifference >= timerLength && typing){
-        socket.emit('stop typing', SelectedChat._id)
+      let timeDiff = timeNow - lastTypingTime;
+      if (timeDiff >= timerLength && !typing) {
+        socket.emit("stop typing", SelectedChat._id);
         setTyping(false);
       }
     }, timerLength);
@@ -216,7 +218,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               </>
             )}
             <FormControl onKeyDown={sendMessage} isRequired mt={3}>
-              {istyping? <div>Loading</div>:(<></>)}
+              {istyping? <Typing/>:(<></>)}
               <Input
                 variant={"filled"}
                 bg="#E0E0E0"
