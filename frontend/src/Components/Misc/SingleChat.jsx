@@ -17,6 +17,7 @@ import axios from "axios";
 import ScrollableChat from "./ScrollableChat";
 import io from "socket.io-client";
 import Typing from "./Typing";
+import sent from "../../Assets/Audio/Sent.mp3"
 
 const ENDPOINT = "http://localhost:5000";
 var socket, selectedChatCompare;
@@ -30,6 +31,10 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [socketConnected, setSocketConnected] = useState(false);
   const [typing, setTyping] = useState(false);
   const [istyping, setIsTyping] = useState(false);
+
+  const sendSoundPlay = ()=>{
+    new Audio(sent).play()
+  }
 
   const fetchMessages = async () => {
     if (!SelectedChat) return;
@@ -83,6 +88,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           config
         );
 
+        sendSoundPlay();
         socket.emit("new message", data);
         setMessages([...messages, data]);
       } catch (error) {
