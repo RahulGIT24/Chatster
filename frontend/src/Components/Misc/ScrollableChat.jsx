@@ -15,7 +15,7 @@ const ScrollableChat = ({ messages }) => {
     <div style={{ overflowY: "scroll",height: "400px"}}>
       {messages &&
         messages.map((m, i) => (
-          <div style={{ display: "flex" }} key={m._id}>
+          <div style={{ display: "flex", color:"white" }} key={m._id}>
             {(isSameSender(messages, m, i, user.sendUser.id) ||
               isLastMessage(messages, i, user.sendUser.id)) && (
               <Tooltip label={m.sender.name} placement="bottom-start" hasArrow>
@@ -32,7 +32,7 @@ const ScrollableChat = ({ messages }) => {
             <span
               style={{
                 backgroundColor: `${
-                  m.sender._id === user.sendUser.id ? "#BEE3F8" : "#B9F5D0"
+                  m.sender._id === user.sendUser.id ? "purple" : "black"
                 }`,
                 marginLeft: isSameSenderMargin(
                   messages,

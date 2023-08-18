@@ -31,7 +31,7 @@ const ProfileModal = ({ user, children }) => {
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent style={{backgroundImage: "linear-gradient(to right top, #051937, #171228, #190a1a, #12040d, #000000)", color:'white'}}>
           <ModalHeader textAlign={"center"}>{user.name}</ModalHeader>
           <ModalCloseButton />
           <ModalBody
@@ -50,7 +50,7 @@ const ProfileModal = ({ user, children }) => {
             <Text fontSize={"2xl"}><b>{user.email}</b></Text>
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
+            <Button mr={3} onClick={onClose} color={'purple'} bg={"black"}>
               Close
             </Button>
           </ModalFooter>

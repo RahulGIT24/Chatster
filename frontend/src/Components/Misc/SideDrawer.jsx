@@ -120,13 +120,23 @@ const SideDrawer = () => {
         display="flex"
         justifyContent="space-between"
         alignItems="center"
-        bg="white"
+        style={{
+          backgroundImage:
+            "linear-gradient(to right top, #051937, #171228, #190a1a, #12040d, #000000)",
+          color: "white",
+        }}
         w="100%"
         p="5px 10px 5px 10px"
         borderWidth="5px"
       >
         <Tooltip label="Search Users to chat" hasArrow placement="bottom-end">
-          <Button variant="ghost" onClick={onOpen}>
+          <Button
+            variant="ghost"
+            onClick={onOpen}
+            bg={"purple"}
+            color={"white"}
+            _hover={{ color: "black" }}
+          >
             <BiSearch />
             <Text d={{ base: "none", md: "flex" }} px={4}>
               Search User
@@ -140,12 +150,12 @@ const SideDrawer = () => {
           <Menu>
             <MenuButton paddingRight={2}>
               <NotificationBadge count={notification.length}>
-                <BellIcon fontSize="2xl" m={1}/>
+                <BellIcon fontSize="2xl" m={1} />
               </NotificationBadge>
             </MenuButton>
             <MenuList pl={2}>
               {!notification.length && "No New Messages"}
-              {notification.map((notif,index) => (
+              {notification.map((notif, index) => (
                 <MenuItem
                   key={index}
                   onClick={() => {
@@ -161,7 +171,15 @@ const SideDrawer = () => {
             </MenuList>
           </Menu>
           <Menu>
-            <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
+            <MenuButton
+              as={Button}
+              rightIcon={<ChevronDownIcon />}
+              style={{
+                backgroundImage:
+                  "linear-gradient(to right top, #051937, #171228, #190a1a, #12040d, #000000)",
+                color: "white",
+              }}
+            >
               <Avatar
                 size={"sm"}
                 cursor={"pointer"}
@@ -169,12 +187,36 @@ const SideDrawer = () => {
                 src={user.sendUser.name}
               />
             </MenuButton>
-            <MenuList>
+            <MenuList
+              color={"black"}
+              style={{
+                backgroundImage:
+                  "linear-gradient(to right top, #051937, #171228, #190a1a, #12040d, #000000)",
+                color: "white",
+              }}
+            >
               <ProfileModal user={user.sendUser}>
-                <MenuItem>My Profile</MenuItem>
+                <MenuItem
+                  style={{
+                    backgroundImage:
+                      "linear-gradient(to right top, #051937, #171228, #190a1a, #12040d, #000000)",
+                    color: "white",
+                  }}
+                >
+                  My Profile
+                </MenuItem>
               </ProfileModal>
               <MenuDivider />
-              <MenuItem onClick={logoutHandler}>Log Out</MenuItem>
+              <MenuItem
+                onClick={logoutHandler}
+                style={{
+                  backgroundImage:
+                    "linear-gradient(to right top, #051937, #171228, #190a1a, #12040d, #000000)",
+                  color: "white",
+                }}
+              >
+                Log Out
+              </MenuItem>
             </MenuList>
           </Menu>
         </div>
@@ -182,19 +224,27 @@ const SideDrawer = () => {
 
       <Drawer placement="left" onClose={onClose} isOpen={isOpen}>
         <DrawerOverlay />
-        <DrawerContent>
+        <DrawerContent
+          style={{
+            backgroundImage:
+              "linear-gradient(to right top, #051937, #171228, #190a1a, #12040d, #000000)",
+            color: "white",
+          }}
+        >
           <DrawerHeader borderBottomWidth={"1px"}>Search Users</DrawerHeader>
           <DrawerBody>
             <Box display={"flex"} pb={2}>
               <Input
-                placeholder="Search user by name or email"
+                placeholder="Search user here"
                 mr={2}
                 value={search}
                 onChange={(e) => {
                   setSearch(e.target.value);
                 }}
               />
-              <Button onClick={handleSearch}>Go</Button>
+              <Button onClick={handleSearch} bg={"black"} color={"purple"}>
+                Go
+              </Button>
             </Box>
             {loading ? (
               <ChatLoading />

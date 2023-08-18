@@ -284,7 +284,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent style={{backgroundImage: "linear-gradient(to right top, #051937, #171228, #190a1a, #12040d, #000000)", color:'white'}}>
           <ModalHeader
             fontSize={"35px"}
             fontFamily={"Work sans"}
@@ -316,7 +316,8 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
               />
               <Button
                 variant={"solid"}
-                colorScheme="teal"
+                bg={"black"}
+                color={"purple"}
                 ml={1}
                 isLoading={renameLoading}
                 onClick={handleRename}
