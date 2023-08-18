@@ -124,7 +124,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
   };
 
   const handleAddUser = async (user1) => {
-    if (SelectedChat.groupAdmin._id != user.sendUser.id) {
+    if (SelectedChat.groupAdmin._id !== user.sendUser.id) {
       toast({
         title: "Only Admin can add user to group",
         status: "error",
@@ -187,7 +187,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
   };
 
   const handleRename = async () => {
-    if (SelectedChat.groupAdmin._id != user.sendUser.id) {
+    if (SelectedChat.groupAdmin._id !== user.sendUser.id) {
       toast({
         title: "Only Admin can change group name",
         status: "error",
