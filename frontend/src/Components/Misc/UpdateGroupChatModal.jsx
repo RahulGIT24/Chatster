@@ -124,7 +124,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
   };
 
   const handleAddUser = async (user1) => {
-    if (SelectedChat.groupAdmin._id != user.sendUser.id) {
+    if (SelectedChat.groupAdmin._id !== user.sendUser.id) {
       toast({
         title: "Only Admin can add user to group",
         status: "error",
@@ -187,7 +187,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
   };
 
   const handleRename = async () => {
-    if (SelectedChat.groupAdmin._id != user.sendUser.id) {
+    if (SelectedChat.groupAdmin._id !== user.sendUser.id) {
       toast({
         title: "Only Admin can change group name",
         status: "error",
@@ -284,7 +284,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent style={{backgroundImage: "linear-gradient(to right top, #051937, #171228, #190a1a, #12040d, #000000)", color:'white'}}>
           <ModalHeader
             fontSize={"35px"}
             fontFamily={"Work sans"}
@@ -316,7 +316,8 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
               />
               <Button
                 variant={"solid"}
-                colorScheme="teal"
+                bg={"black"}
+                color={"purple"}
                 ml={1}
                 isLoading={renameLoading}
                 onClick={handleRename}

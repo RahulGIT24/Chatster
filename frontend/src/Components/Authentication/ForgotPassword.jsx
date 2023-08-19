@@ -185,23 +185,26 @@ const ForgotPassword = () => {
         display={"flex"}
         justifyContent={"center"}
         p={3}
-        bg={"white"}
+        bg={"black"}
+        color={"white"}
+        borderColor={"purple"}
         w="100%"
         m="40px 0 15px 0"
-        borderRadius={"lg"}
+        borderRadius={"3xl"}
         borderWidth={"1px"}
       >
-        <Text fontSize={"2xl"} fontFamily={"Work sans"} color={"black"}>
+        <Text fontSize={"2xl"} fontFamily={"Work sans"}>
           Reset Your ChatoPedia Password
         </Text>
       </Box>
       <Box
-        bg={"white"}
+        bg={"black"}
+        borderColor={"purple"}
         p={4}
         borderRadius={"lg"}
         borderWidth={"1px"}
         w="100%"
-        color={"black"}
+        color={"white"}
       >
         <VStack spacing={"5px"}>
           <FormControl id="email" isRequired>
@@ -217,7 +220,8 @@ const ForgotPassword = () => {
                 <Button
                   h="1.75rem"
                   size="sm"
-                  colorScheme="blue"
+                  bg={"black"}
+                  color={"purple"}
                   isLoading={loading}
                   onClick={sendMail}
                 >
@@ -239,7 +243,8 @@ const ForgotPassword = () => {
                 <Button
                   h="1.75rem"
                   size="sm"
-                  colorScheme="blue"
+                  bg={"black"}
+                  color={"purple"}
                   isLoading={loading2}
                   onClick={validateOTP}
                   isDisabled={disable}
@@ -266,6 +271,7 @@ const ForgotPassword = () => {
                   onClick={() => {
                     setShow(!show);
                   }}
+                  bg={"black"} color={"purple"}
                 >
                   {show ? "Hide" : "Show"}
                 </Button>
@@ -289,6 +295,7 @@ const ForgotPassword = () => {
                   onClick={() => {
                     setShow1(!show1);
                   }}
+                  bg={"black"} color={"purple"}
                 >
                   {show1 ? "Hide" : "Show"}
                 </Button>
@@ -296,7 +303,9 @@ const ForgotPassword = () => {
             </InputGroup>
           </FormControl>
           <Button
-            colorScheme="blue"
+             className="btn"
+             bg={"purple"}
+             color={"white"}
             width={"100%"}
             style={{ marginTop: 15 }}
             isLoading={loading3}

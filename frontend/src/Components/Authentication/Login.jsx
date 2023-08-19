@@ -5,13 +5,12 @@ import {
   Input,
   InputGroup,
   InputRightElement,
-  Text,
   VStack,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useToast } from "@chakra-ui/react";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -93,7 +92,7 @@ const SignUp = () => {
     <VStack spacing={"5px"}>
       <FormControl id="email" isRequired>
         <FormLabel>Email</FormLabel>
-        <Input placeholder="Enter your Email Address" onChange={onChange} />
+        <Input placeholder="Enter your Email Address" onChange={onChange} borderColor={"purple"} />
       </FormControl>
       <FormControl id="password" isRequired>
         <FormLabel>Password</FormLabel>
@@ -102,19 +101,22 @@ const SignUp = () => {
             placeholder="Password"
             type={show ? "text" : "password"}
             onChange={onChange}
+            borderColor={"purple"}
           />
           <InputRightElement width={"4.5rem"}>
-            <Button h="1.75rem" size="sm" onClick={handleClick}>
+            <Button h="1.75rem" size="sm" onClick={handleClick} bg={"black"} color={"purple"}>
               {show ? "Hide" : "Show"}
             </Button>
           </InputRightElement>
         </InputGroup>
       </FormControl>
-      <Text id="forgotPass">
+      {/* <Text id="forgotPass">
         <Link to={"/forgotPassword"}>Forgot Password</Link>
-      </Text>
+      </Text> */}
       <Button
-        colorScheme="blue"
+      className="btn"
+        bg={"purple"}
+        color={"white"}
         width={"100%"}
         style={{ marginTop: 15 }}
         onClick={submitHandler}

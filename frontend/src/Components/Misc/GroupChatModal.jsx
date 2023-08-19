@@ -132,7 +132,7 @@ const GroupChatModal = ({ children }) => {
       <span onClick={onOpen}>{children}</span>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent style={{backgroundImage: "linear-gradient(to right top, #051937, #171228, #190a1a, #12040d, #000000)", color:'white'}}>
           <ModalHeader
             fontSize="35px"
             fontFamily="Work sans"
@@ -188,7 +188,7 @@ const GroupChatModal = ({ children }) => {
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" onClick={handleSubmit}>
+            <Button bg={'black'} color={"purple"} onClick={handleSubmit}>
               Create Chat
             </Button>
           </ModalFooter>

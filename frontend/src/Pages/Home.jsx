@@ -32,23 +32,25 @@ const Home = () => {
         display={"flex"}
         justifyContent={"center"}
         p={3}
-        bg={"white"}
+        bg={"black"}
         w="100%"
         m="40px 0 15px 0"
-        borderRadius={"lg"}
+        borderRadius={"3xl"}
         borderWidth={"1px"}
+        borderColor={"purple"}
       >
-        <Text fontSize={"2xl"} fontFamily={"Work sans"} color={"black"}>
+        <Text fontSize={"2xl"} fontFamily={"Work sans"} color={"white"}>
           ChatoPedia
         </Text>
       </Box>
       <Box
-        bg={"white"}
+        bg={"black"}
         p={4}
+        borderColor={"purple"}
         borderRadius={"lg"}
         borderWidth={"1px"}
         w="100%"
-        color={"black"}
+        color={"white"}
       >
         <Tabs variant="soft-rounded">
           <TabList mb="1em">
