@@ -87,8 +87,38 @@ const SideDrawer = () => {
     }
   };
 
+  const checkChat = (userID) => {
+    const len = chats.length;
+    // Logic to check whether chat is already created or not
+
+    if (!len) {
+      return false;
+    }
+    for (let index = 0; index < len; index++) {
+      if (
+        userID == chats[index].users[1]._id ||
+        userID == chats[index].users[0]._id
+      ) {
+        return true;
+      }
+    }
+
+    return false;
+  };
+
   const accessChat = async (userID) => {
     try {
+      if (checkChat(userID)) {
+        toast({
+          title: "Chat is created already!",
+          status: "warning",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom-left",
+        });
+        return;
+      }
+
       setLoadingChat(true);
       const config = {
         headers: {
@@ -96,9 +126,9 @@ const SideDrawer = () => {
           Authorization: `Bearer ${user.sendUser.token}`,
         },
       };
-      const { data } = await axios.post(`/api/chat`, { userID }, config);
 
-      if (!chats.find((c) => c._id === data._id)) setChats([data, ...chats]);
+      const { data } = await axios.post(`/api/chat`, { userID }, config);
+      setChats([data, ...chats]);
       setSelectedChat(data);
       setLoadingChat(false);
       onClose();
@@ -153,7 +183,7 @@ const SideDrawer = () => {
                 <BellIcon fontSize="2xl" m={1} />
               </NotificationBadge>
             </MenuButton>
-            <MenuList pl={2}>
+            <MenuList pl={2} color={"black"}>
               {!notification.length && "No New Messages"}
               {notification.map((notif, index) => (
                 <MenuItem
