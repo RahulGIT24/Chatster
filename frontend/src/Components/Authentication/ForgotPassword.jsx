@@ -194,7 +194,7 @@ const ForgotPassword = () => {
         borderWidth={"1px"}
       >
         <Text fontSize={"2xl"} fontFamily={"Work sans"}>
-          Reset Your ChatoPedia Password
+          Reset Your Chat'Ster Password
         </Text>
       </Box>
       <Box
