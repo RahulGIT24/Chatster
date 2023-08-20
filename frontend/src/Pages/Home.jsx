@@ -40,7 +40,7 @@ const Home = () => {
         borderColor={"purple"}
       >
         <Text fontSize={"2xl"} fontFamily={"Work sans"} color={"white"}>
-          ChatoPedia
+          Chat'Ster
         </Text>
       </Box>
       <Box

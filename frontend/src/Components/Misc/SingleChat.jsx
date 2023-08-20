@@ -118,7 +118,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     selectedChatCompare = SelectedChat;
   }, [SelectedChat]);
 
-
+// TODO Fix notification bug
   useEffect(() => {
     socket.on("message recieved", (newMessageRecieved) => {
       if (
