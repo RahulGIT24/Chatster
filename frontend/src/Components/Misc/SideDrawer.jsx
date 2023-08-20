@@ -95,11 +95,13 @@ const SideDrawer = () => {
       return false;
     }
     for (let index = 0; index < len; index++) {
-      if (
-        userID == chats[index].users[1]._id ||
-        userID == chats[index].users[0]._id
-      ) {
-        return true;
+      if(chats[index].isGroupChat === false){
+        if (
+          userID == chats[index].users[1]._id ||
+          userID == chats[index].users[0]._id
+        ) {
+          return true;
+        }
       }
     }
 
