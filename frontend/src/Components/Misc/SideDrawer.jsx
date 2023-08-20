@@ -95,11 +95,13 @@ const SideDrawer = () => {
       return false;
     }
     for (let index = 0; index < len; index++) {
-      if (
-        userID == chats[index].users[1]._id ||
-        userID == chats[index].users[0]._id
-      ) {
-        return true;
+      if (chats[index].isGroupChat === false) {
+        if (
+          userID == chats[index].users[1]._id ||
+          userID == chats[index].users[0]._id
+        ) {
+          return true;
+        }
       }
     }
 
@@ -177,7 +179,7 @@ const SideDrawer = () => {
           Chat'Ster
         </Text>
         <div>
-          <Menu>
+          {/* <Menu>
             <MenuButton paddingRight={2}>
               <NotificationBadge count={notification.length}>
                 <BellIcon fontSize="2xl" m={1} />
@@ -185,6 +187,7 @@ const SideDrawer = () => {
             </MenuButton>
             <MenuList pl={2} color={"black"}>
               {!notification.length && "No New Messages"}
+
               {notification.map((notif, index) => (
                 <MenuItem
                   key={index}
@@ -199,7 +202,7 @@ const SideDrawer = () => {
                 </MenuItem>
               ))}
             </MenuList>
-          </Menu>
+          </Menu> */}
           <Menu>
             <MenuButton
               as={Button}
