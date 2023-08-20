@@ -7,12 +7,19 @@ import {
   isSameUser,
 } from "../../config/ChatLogics";
 import { ChatState } from "../../Context/ChatProvider";
+import { useEffect, useRef } from "react";
 
 const ScrollableChat = ({ messages }) => {
   const { user } = ChatState();
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    // Scroll to the bottom when component is mounted or messages are updated
+    containerRef.current.scrollTop = containerRef.current.scrollHeight;
+  }, [messages]);
 
   return (
-    <div style={{ overflowY: "scroll",height: "400px"}}>
+    <div ref={containerRef} style={{ overflowY: "scroll",height: "60vh"}}>
       {messages &&
         messages.map((m, i) => (
           <div style={{ display: "flex", color:"white" }} key={m._id}>
