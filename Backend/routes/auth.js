@@ -199,20 +199,19 @@ router.post("/validateOTP", [
         const user = await OTP.findOne({ email });
 
         // Checking expiry time of OTP
-        let diff = user.expiryTime
-        if (diff < 0) {
-            res.status(400).json({ success, error: "OTP Expired" })
-        }
+        // let diff = currentTime - user.expiryTime
+        // if (diff < 0) {
+        //     return res.status(400).json({ success, msg: "OTP Expired" })
+        // }
 
-        const otpcompare = bcrypt.compare(Obtainedotp, user.code)
+        const otpcompare = await bcrypt.compare(Obtainedotp, user.code)
 
         if (otpcompare) {
             success = true;
-            res.status(200).json({ success, msg: "Validated Successfully" })
+            return res.status(200).json({ success, msg: "Validated Successfully" })
         } else {
-            res.status(401).json({ success, msg: "Incorrect OTP" })
+            return res.status(401).json({ success, msg: "Incorrect OTP" })
         }
-
 
     } catch (e) {
         res.status(500).json({ success, error: "Internal Server Error Occured" })

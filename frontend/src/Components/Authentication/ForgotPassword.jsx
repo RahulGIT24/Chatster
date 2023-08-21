@@ -93,7 +93,7 @@ const ForgotPassword = () => {
         "/api/auth/validateOTP",
         {
           email,
-          Obtainedotp: otp,
+          Obtainedotp: String(otp),
         },
         config
       );
@@ -105,6 +105,7 @@ const ForgotPassword = () => {
         isClosable: true,
         position: "bottom",
       });
+
       setLoading2(false);
       setDisable2(false);
     } catch (error) {
