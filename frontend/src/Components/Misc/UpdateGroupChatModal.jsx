@@ -36,9 +36,10 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleRemove = async (user1) => {
-    if (SelectedChat.groupAdmin._id === user1._id) {
+    
+    if (user.sendUser.id !== SelectedChat.groupAdmin._id) {
       toast({
-        title: "Admin can't remove himself from the group",
+        title: "Only group admins can remove group members",
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -47,9 +48,9 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
       return;
     }
 
-    if (user.sendUser.id !== SelectedChat.groupAdmin._id) {
+    if (SelectedChat.groupAdmin._id === user1._id) {
       toast({
-        title: "Only group admins can remove group members",
+        title: "Admin can't remove himself from the group",
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -77,7 +78,6 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
 
       setSelectedChat(data);
       setFetchAgain(!fetchAgain);
-      // fetchMessages();
       setLoading(false);
     } catch (error) {
       toast({
@@ -215,7 +215,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
         config
       );
 
-      setFetchAgain(true);
+      setFetchAgain(!fetchAgain);
       setSelectedChat(data);
       setRenameLoading(false);
       onClose();
