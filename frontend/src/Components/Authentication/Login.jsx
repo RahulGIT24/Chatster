@@ -5,12 +5,14 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  Text,
   VStack,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useToast } from "@chakra-ui/react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { ChatState } from "../../Context/ChatProvider";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -21,6 +23,8 @@ const SignUp = () => {
     email: "",
     password: "",
   });
+
+  const { setForgotPass } = ChatState();
 
   // Destructuring form data
   const { email, password } = formData;
@@ -44,6 +48,8 @@ const SignUp = () => {
         isClosable: true,
         position: "bottom",
       });
+      setLoading(false);
+      return;
     }
 
     try {
@@ -92,7 +98,11 @@ const SignUp = () => {
     <VStack spacing={"5px"}>
       <FormControl id="email" isRequired>
         <FormLabel>Email</FormLabel>
-        <Input placeholder="Enter your Email Address" onChange={onChange} borderColor={"purple"} />
+        <Input
+          placeholder="Enter your Email Address"
+          onChange={onChange}
+          borderColor={"purple"}
+        />
       </FormControl>
       <FormControl id="password" isRequired>
         <FormLabel>Password</FormLabel>
@@ -104,17 +114,30 @@ const SignUp = () => {
             borderColor={"purple"}
           />
           <InputRightElement width={"4.5rem"}>
-            <Button h="1.75rem" size="sm" onClick={handleClick} bg={"black"} color={"purple"}>
+            <Button
+              h="1.75rem"
+              size="sm"
+              onClick={handleClick}
+              bg={"black"}
+              color={"purple"}
+            >
               {show ? "Hide" : "Show"}
             </Button>
           </InputRightElement>
         </InputGroup>
       </FormControl>
-      {/* <Text id="forgotPass">
-        <Link to={"/forgotPassword"}>Forgot Password</Link>
-      </Text> */}
+      <Text id="forgotPass">
+        <Text
+          style={{ cursor: "pointer" }}
+          onClick={() => {
+            setForgotPass(true);
+          }}
+        >
+          Forgot Password ?
+        </Text>
+      </Text>
       <Button
-      className="btn"
+        className="btn"
         bg={"purple"}
         color={"white"}
         width={"100%"}
