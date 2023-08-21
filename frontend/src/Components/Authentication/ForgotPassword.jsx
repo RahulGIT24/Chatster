@@ -13,7 +13,6 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { ChatState } from "../../Context/ChatProvider";
 
 const ForgotPassword = () => {
@@ -29,7 +28,6 @@ const ForgotPassword = () => {
   const [show1, setShow1] = useState(false);
   const [password, setPassword] = useState("");
   const [cpassword, setCpassword] = useState("");
-  const navigate = useNavigate();
   const {setForgotPass} = ChatState();
 
   const sendMail = async () => {
