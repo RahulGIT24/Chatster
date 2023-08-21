@@ -93,6 +93,8 @@ const SignUp = () => {
         isClosable: true,
         position: "bottom",
       });
+      setPicLoading(false);
+      return;
     }
 
     try {
@@ -136,18 +138,26 @@ const SignUp = () => {
   };
 
   const handleClick = () => {
-    setShow(!show)
+    setShow(!show);
   };
 
   return (
     <VStack spacing={"5px"}>
       <FormControl id="name" isRequired>
         <FormLabel>Name</FormLabel>
-        <Input placeholder="Enter your name" onChange={onChange} borderColor={"purple"}/>
+        <Input
+          placeholder="Enter your name"
+          onChange={onChange}
+          borderColor={"purple"}
+        />
       </FormControl>
       <FormControl id="email" isRequired>
         <FormLabel>Email</FormLabel>
-        <Input placeholder="Enter your Email Address" onChange={onChange} borderColor={"purple"}/>
+        <Input
+          placeholder="Enter your Email Address"
+          onChange={onChange}
+          borderColor={"purple"}
+        />
       </FormControl>
       <FormControl id="password" isRequired>
         <FormLabel>Password</FormLabel>
@@ -159,7 +169,13 @@ const SignUp = () => {
             borderColor={"purple"}
           />
           <InputRightElement width={"4.5rem"}>
-            <Button h="1.75rem" size="sm" onClick={handleClick} bg={"black"} color={"purple"}>
+            <Button
+              h="1.75rem"
+              size="sm"
+              onClick={handleClick}
+              bg={"black"}
+              color={"purple"}
+            >
               {show ? "Hide" : "Show"}
             </Button>
           </InputRightElement>
@@ -172,7 +188,8 @@ const SignUp = () => {
           p={1.5}
           accept="image/"
           onChange={(e) => postDetails(e.target.files[0])}
-          bg={"black"} color={"purple"}
+          bg={"black"}
+          color={"purple"}
           borderColor={"purple"}
         ></Input>
       </FormControl>

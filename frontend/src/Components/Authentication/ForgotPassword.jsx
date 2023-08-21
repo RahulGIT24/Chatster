@@ -13,7 +13,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { ChatState } from "../../Context/ChatProvider";
 
 const ForgotPassword = () => {
   const toast = useToast();
@@ -28,7 +28,7 @@ const ForgotPassword = () => {
   const [show1, setShow1] = useState(false);
   const [password, setPassword] = useState("");
   const [cpassword, setCpassword] = useState("");
-  const navigate = useNavigate();
+  const {setForgotPass} = ChatState();
 
   const sendMail = async () => {
     setLoading(true);
@@ -93,7 +93,7 @@ const ForgotPassword = () => {
         "/api/auth/validateOTP",
         {
           email,
-          Obtainedotp: otp,
+          Obtainedotp: String(otp),
         },
         config
       );
@@ -105,6 +105,7 @@ const ForgotPassword = () => {
         isClosable: true,
         position: "bottom",
       });
+
       setLoading2(false);
       setDisable2(false);
     } catch (error) {
@@ -165,7 +166,7 @@ const ForgotPassword = () => {
         position: "bottom",
       });
       setLoading3(false);
-      navigate("/chats");
+      setForgotPass(false);
     } catch (error) {
       toast({
         title: "Error Occured",
@@ -220,7 +221,7 @@ const ForgotPassword = () => {
                 <Button
                   h="1.75rem"
                   size="sm"
-                  bg={"black"}
+                  bg={"transparent"}
                   color={"purple"}
                   isLoading={loading}
                   onClick={sendMail}
@@ -271,7 +272,8 @@ const ForgotPassword = () => {
                   onClick={() => {
                     setShow(!show);
                   }}
-                  bg={"black"} color={"purple"}
+                  bg={"black"}
+                  color={"purple"}
                 >
                   {show ? "Hide" : "Show"}
                 </Button>
@@ -295,7 +297,8 @@ const ForgotPassword = () => {
                   onClick={() => {
                     setShow1(!show1);
                   }}
-                  bg={"black"} color={"purple"}
+                  bg={"black"}
+                  color={"purple"}
                 >
                   {show1 ? "Hide" : "Show"}
                 </Button>
@@ -303,9 +306,9 @@ const ForgotPassword = () => {
             </InputGroup>
           </FormControl>
           <Button
-             className="btn"
-             bg={"purple"}
-             color={"white"}
+            className="btn"
+            bg={"purple"}
+            color={"white"}
             width={"100%"}
             style={{ marginTop: 15 }}
             isLoading={loading3}
@@ -314,6 +317,16 @@ const ForgotPassword = () => {
           >
             Change Password
           </Button>
+          <Text id="forgotPass">
+            <Text
+              style={{ cursor: "pointer", margin:"7px 0px" }}
+              onClick={() => {
+                setForgotPass(false);
+              }}
+            >
+              Login Instead
+            </Text>
+          </Text>
         </VStack>
       </Box>
     </Container>

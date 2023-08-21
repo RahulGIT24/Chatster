@@ -12,19 +12,21 @@ import {
 import Login from "../Components/Authentication/Login";
 import SignUp from "../Components/Authentication/SignUp";
 import { useNavigate } from "react-router";
+import { ChatState } from "../Context/ChatProvider";
+import ForgotPassword from "../Components/Authentication/ForgotPassword";
 
 const Home = () => {
-  const [user, setUser] = useState();
-
   const navigate = useNavigate();
+  const { forgotPass } = ChatState();
 
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-    if (userInfo) {
-      navigate("/chats");
-    }
-    setUser(userInfo);
+    if (userInfo) navigate("/chats");
   }, [navigate]);
+
+  if (forgotPass) {
+    return <ForgotPassword />;
+  }
 
   return (
     <Container maxW={"xl"} centerContent>
