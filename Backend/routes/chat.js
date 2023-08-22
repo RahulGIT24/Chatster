@@ -116,6 +116,17 @@ router.put("/rename", protect, async (req, res) => {
 
 })
 
+router.put("/changeAdmin", protect, async(req,res)=>{
+    try {
+        const { chatID, adminID } = req.body;
+
+        const updatedChat = await Chat.findByIdAndUpdate(chatID, { groupAdmin: adminID }, { new: true }).populate("users", "-password").populate("groupAdmin", "-password");
+        res.status(200).send(updatedChat);
+    } catch (error) {
+        res.status(400).send("Couldn't update group admin")
+    }
+})
+
 router.put("/groupRemove", protect, async (req, res) => {
     try {
         const { chatId, userId } = req.body;

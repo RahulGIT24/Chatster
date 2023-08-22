@@ -11,7 +11,6 @@ const generateToken = require("../config/generateToken")
 const router = express.Router()
 
 dotenv.config()
-const JWT_SECRET = process.env.KEY;
 
 // ROUTE 1: Creating a user
 router.post("/createuser", [
