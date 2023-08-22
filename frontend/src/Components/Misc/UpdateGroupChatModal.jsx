@@ -15,6 +15,11 @@ import {
   FormControl,
   Input,
   Spinner,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { ChatState } from "../../Context/ChatProvider";
@@ -36,7 +41,6 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleRemove = async (user1) => {
-    
     if (user.sendUser.id !== SelectedChat.groupAdmin._id) {
       toast({
         title: "Only group admins can remove group members",
@@ -241,6 +245,17 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
 
   const leaveGroup = async (user1) => {
     try {
+      if (SelectedChat.groupAdmin._id === user.sendUser.id) {
+        toast({
+          title: "First Change the admin of the group then leave",
+          status: "warning",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom",
+        });
+        return;
+      }
+
       setLeave(true);
       const config = {
         headers: {
@@ -278,13 +293,78 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
       return;
     }
   };
+
+  const changeAdmin = async (user1) => {
+    try {
+      if (!user1) {
+        toast({
+          title: "User is undefined",
+          status: "warning",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom",
+        });
+        return;
+      }
+
+      if (SelectedChat.groupAdmin._id !== user.sendUser.id) {
+        toast({
+          title: "Only admins can change admin",
+          status: "warning",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom",
+        });
+        return;
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.sendUser.token}`,
+        },
+      };
+      const { data } = await axios.put(
+        `/api/chat/changeAdmin`,
+        {
+          chatID: SelectedChat._id,
+          adminID: user1,
+        },
+        config
+      );
+
+      setFetchAgain(!fetchAgain);
+      setSelectedChat();
+      toast({
+        title: "Admin Changed",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+    } catch (error) {
+      toast({
+        title: "Error Occured",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      return;
+    }
+  };
   return (
     <>
       <IconButton display={"flex"} icon={<ViewIcon />} onClick={onOpen} />
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent style={{backgroundImage: "linear-gradient(to right top, #051937, #171228, #190a1a, #12040d, #000000)", color:'white'}}>
+        <ModalContent
+          style={{
+            backgroundImage:
+              "linear-gradient(to right top, #051937, #171228, #190a1a, #12040d, #000000)",
+            color: "white",
+          }}
+        >
           <ModalHeader
             fontSize={"35px"}
             fontFamily={"Work sans"}
@@ -350,6 +430,36 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
               Leave Group
             </Button>
           </ModalFooter>
+          {SelectedChat.groupAdmin._id === user.sendUser.id ? (
+            <Accordion allowToggle>
+              <AccordionItem>
+                <h2>
+                  <AccordionButton>
+                    <Box as="span" flex="1" textAlign="left">
+                      Change Group Admin
+                    </Box>
+                    <AccordionIcon />
+                  </AccordionButton>
+                </h2>
+
+                <AccordionPanel pb={4}>
+                  {SelectedChat.users.map((u) => {
+                    return (
+                      u._id !== SelectedChat.groupAdmin._id && (
+                        <UserListItem
+                          key={u._id}
+                          user={u}
+                          handleFunction={() => changeAdmin(u._id)}
+                        />
+                      )
+                    );
+                  })}
+                </AccordionPanel>
+              </AccordionItem>
+            </Accordion>
+          ) : (
+            <></>
+          )}
         </ModalContent>
       </Modal>
     </>
