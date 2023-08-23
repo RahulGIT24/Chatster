@@ -177,6 +177,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               icon={<ArrowBackIcon />}
               onClick={() => {
                 setSelectedChat("");
+                setFetchAgain(!fetchAgain);
               }}
             />
             {SelectedChat.isGroupChat === false ? (
