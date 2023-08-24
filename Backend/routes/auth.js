@@ -3,7 +3,6 @@ const { body, validationResult } = require("express-validator")
 const dotenv = require("dotenv");
 const User = require("../models/UserModel")
 const bcrypt = require('bcryptjs')
-const jwt = require("jsonwebtoken");
 const OTP = require("../models/OTP")
 const nodemailer = require("nodemailer");
 const generateToken = require("../config/generateToken")
@@ -51,15 +50,15 @@ router.post("/createuser", [
             // Sending authtoken in response
             const sendUser = {
                 id: user.id,
-                name:user.name,
+                name: user.name,
                 email: user.email,
                 pic: user.pic,
                 token
             }
-            res.json({ sendUser, success });
+            return res.json({ sendUser, success });
         } catch (e) {
             console.error(e.message);
-            res.status(500).send("Internal Server Error"); // In case of errors
+            return res.status(500).send("Internal Server Error"); // In case of errors
         }
     }
 )
@@ -97,15 +96,15 @@ router.post("/login", [
         success = true;
         const sendUser = {
             id: user.id,
-            name:user.name,
+            name: user.name,
             email: user.email,
             pic: user.pic,
             token
         }
-        res.json({sendUser, success});
+        return res.json({ sendUser, success });
     } catch (error) {
         console.log(error);
-        res.status(500).send("Internal Server Error"); // In case of errors
+        return res.status(500).send("Internal Server Error"); // In case of errors
     }
 }
 )
@@ -131,7 +130,7 @@ router.post("/email-send", [
 
 
         if (!isUserExist) {
-            res.status(400).json({ success, error: "Sorry you are not registered to ChatoPedia" })
+            return res.status(400).json({ success, error: "Sorry you are not registered to ChatoPedia" })
         }
 
         if (previousOTP) {
@@ -164,16 +163,16 @@ router.post("/email-send", [
         const mailOptions = {
             from: process.env.MAIL,
             to: email,
-            subject: 'One Time Password of ChatoPedia',
+            subject: "One Time Password of Chat'Ster",
             text: `We think you have requested for reset password. Here's your OTP ${otpSend}.`
         };
 
         await transporter.sendMail(mailOptions);
 
         success = true;
-        res.status(200).json({ success, msg: "Please check your Email ID" })
+        return res.status(200).json({ success, msg: "Please check your Email ID" })
     } catch (e) {
-        res.status(400).json({ success, error: "Internal Server Error Occured" })
+        return res.status(400).json({ success, error: "Internal Server Error Occured" })
     }
 }
 )
@@ -213,7 +212,7 @@ router.post("/validateOTP", [
         }
 
     } catch (e) {
-        res.status(500).json({ success, error: "Internal Server Error Occured" })
+        return res.status(500).json({ success, error: "Internal Server Error Occured" })
     }
 }
 )
@@ -245,9 +244,9 @@ router.post("/changePassword", [
         await user.save();
 
         success = true;
-        res.status(200).json({ success, msg: "Password Updated" })
+        return res.status(200).json({ success, msg: "Password Updated" })
     } catch (e) {
-        res.status(500).json({ success, error: "Internal Server Error Occured" })
+        return res.status(500).json({ success, error: "Internal Server Error Occured" })
     }
 }
 )

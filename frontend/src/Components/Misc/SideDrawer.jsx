@@ -217,7 +217,7 @@ const SideDrawer = () => {
                 size={"sm"}
                 cursor={"pointer"}
                 name={user.sendUser.name}
-                src={user.sendUser.name}
+                src={user.sendUser.pic}
               />
             </MenuButton>
             <MenuList

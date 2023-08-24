@@ -27,7 +27,7 @@ const MyChats = ({ fetchAgain }) => {
       return toast({
         title: "Error ocuured",
         status: "error",
-        duration: 9000,
+        duration: 3000,
         isClosable: true,
       });
     }

@@ -91,6 +91,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         sendSoundPlay();
         socket.emit("new message", data);
         setMessages([...messages, data]);
+        return;
       } catch (error) {
         toast({
           title: "Not able to send messages",
@@ -177,6 +178,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               icon={<ArrowBackIcon />}
               onClick={() => {
                 setSelectedChat("");
+                setFetchAgain(!fetchAgain);
               }}
             />
             {SelectedChat.isGroupChat === false ? (
