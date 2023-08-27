@@ -21,14 +21,12 @@ import {
 import React, { useState } from "react";
 import axios from "axios";
 import { BiSearch } from "react-icons/bi";
-import { BellIcon, ChevronDownIcon } from "@chakra-ui/icons";
+import { ChevronDownIcon } from "@chakra-ui/icons";
 import { ChatState } from "../../Context/ChatProvider";
 import ProfileModal from "./ProfileModal";
 import { useNavigate } from "react-router";
 import ChatLoading from "./ChatLoading";
 import UserListItem from "../UserAvatar/UserListItem";
-import { getSender } from "../../config/ChatLogics";
-import NotificationBadge from "./NotificationBadge";
 
 const SideDrawer = () => {
   const { onClose, isOpen, onOpen } = useDisclosure();
@@ -41,8 +39,6 @@ const SideDrawer = () => {
     setSelectedChat,
     chats,
     setChats,
-    notification,
-    setNotification,
   } = ChatState();
 
   const toast = useToast();
@@ -97,8 +93,8 @@ const SideDrawer = () => {
     for (let index = 0; index < len; index++) {
       if (chats[index].isGroupChat === false) {
         if (
-          userID == chats[index].users[1]._id ||
-          userID == chats[index].users[0]._id
+          userID === chats[index].users[1]._id ||
+          userID === chats[index].users[0]._id
         ) {
           return true;
         }

@@ -132,7 +132,7 @@ const ForgotPassword = () => {
       });
       return;
     }
-    if (password != cpassword) {
+    if (password !== cpassword) {
       toast({
         title: "Confirm Password and Password are not same",
         status: "warning",
