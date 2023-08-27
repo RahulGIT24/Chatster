@@ -1,5 +1,7 @@
 const mongoose = require("mongoose")
-const URL = "mongodb://localhost:27017/chatApp";
+const dotenv = require("dotenv");
+dotenv.config()
+const URL = process.env.URL;
 
 const connectDB = async()=>{
     try {
