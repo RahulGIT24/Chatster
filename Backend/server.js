@@ -3,7 +3,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 var cors = require("cors");
 const connectDB = require("./config/db")
-
+const path = require("path")
 const app = express();
 app.use(express.json())
 
@@ -20,6 +20,23 @@ app.use('/api/auth', require("./routes/auth"))
 app.use('/api/user', require("./routes/user"))
 app.use('/api/chat', require("./routes/chat"))
 app.use('/api/message', require("./routes/message"))
+
+// -------------------------------- Deployment --------------------------------
+
+const __dirname1 = path.resolve();
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static(path.join(__dirname1, "/frontend/build")))
+
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname1, "frontend", "build", "index.html"))
+    })
+} else {
+    app.get("/", (req, res) => {
+        res.send("API Running Successfully")
+    })
+}
+
+// -------------------------------- Deployment --------------------------------
 
 const server = app.listen(port, console.log("Listening on port " + port));
 
@@ -43,10 +60,10 @@ io.on("connection", (socket) => {
         console.log("User Joined Room: " + room);
     })
 
-    socket.on('typing',(room)=>{
+    socket.on('typing', (room) => {
         socket.in(room).emit('typing')
     })
-    socket.on('stop typing',(room)=>{
+    socket.on('stop typing', (room) => {
         socket.in(room).emit('stop typing')
     })
 
