@@ -9,12 +9,14 @@ import GroupChatModal from "./GroupChatModal";
 
 const MyChats = ({ fetchAgain }) => {
   const [loggedUser, setLoggedUser] = useState();
+  const [loading, setLoading] = useState(false);
   const toast = useToast();
 
   const { user, setSelectedChat, chats, setChats, SelectedChat } = ChatState();
 
   const fetchChats = async () => {
     try {
+      setLoading(true);
       const config = {
         headers: {
           Authorization: `Bearer ${user.sendUser.token}`,
@@ -23,6 +25,8 @@ const MyChats = ({ fetchAgain }) => {
 
       const { data } = await axios.get("/api/chat/", config);
       setChats(data);
+      setLoading(false);
+      return;
     } catch (e) {
       return toast({
         title: "Error ocuured",
@@ -90,7 +94,7 @@ const MyChats = ({ fetchAgain }) => {
         borderRadius={"lg"}
         overflow={"hidden"}
       >
-        {chats ? (
+        {chats && !loading ? (
           <Stack overflowY="scroll">
             {chats.map((chat) => {
               return (
@@ -114,7 +118,9 @@ const MyChats = ({ fetchAgain }) => {
             })}
           </Stack>
         ) : (
-          <ChatLoading />
+          <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
+            <ChatLoading />
+          </Box>
         )}
       </Box>
     </Box>

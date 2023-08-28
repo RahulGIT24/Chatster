@@ -33,12 +33,13 @@ const SideDrawer = () => {
   const [search, setSearch] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [loadingChat, setLoadingChat] = useState(false);
+  
   const {
     user,
     setSelectedChat,
     chats,
     setChats,
+    setLoadingChat
   } = ChatState();
 
   const toast = useToast();
@@ -130,6 +131,7 @@ const SideDrawer = () => {
       setSelectedChat(data);
       setLoadingChat(false);
       onClose();
+      return;
     } catch (error) {
       toast({
         title: "Error fetching the chat",
@@ -139,6 +141,7 @@ const SideDrawer = () => {
         isClosable: true,
         position: "bottom-left",
       });
+      return;
     }
   };
 
@@ -280,11 +283,11 @@ const SideDrawer = () => {
             ) : (
               searchResults?.map((user) => {
                 return (
-                  <UserListItem
-                    key={user._id}
-                    user={user}
-                    handleFunction={() => accessChat(user._id)}
-                  />
+                    <UserListItem
+                      key={user._id}
+                      user={user}
+                      handleFunction={() => accessChat(user._id)}
+                    />
                 );
               })
             )}

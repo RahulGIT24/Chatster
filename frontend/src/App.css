@@ -7,7 +7,7 @@
   padding: 0;
 }
 
-.App{
+.App {
   min-height: 100vh;
   display: flex;
   /* background-image: url("./Assets/background.jpg");
@@ -16,7 +16,7 @@
   background-image: linear-gradient(to right top, #051937, #171228, #190a1a, #12040d, #000000);
 }
 
-#forgotPass:hover{
+#forgotPass:hover {
   color: purple;
 }
 
@@ -70,18 +70,30 @@
   0% {
     opacity: 0;
   }
+
   50% {
     opacity: 0.8;
   }
+
   100% {
     opacity: 0;
   }
 }
 
-.btn:hover{
+.btn:hover {
   color: purple;
 }
 
-.chatBox{
+.chatBox {
   background-image: linear-gradient(to right top, #051937, #171228, #190a1a, #12040d, #000000);
+}
+
+#userItem {
+  background: gray.200;
+  opacity: 0.6
+}
+
+#userItem:hover {
+  cursor: not-allowed;
+  pointer-events: none;
 }

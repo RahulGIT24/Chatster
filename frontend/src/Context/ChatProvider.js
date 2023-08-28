@@ -8,6 +8,7 @@ const ChatProvider = (props)=>{
     const [SelectedChat, setSelectedChat] = useState();
     const [chats, setChats] = useState([]);
     const [notification, setNotification] = useState([]);
+    const [loadingChat, setLoadingChat] = useState(false);
     const [forgotPass, setForgotPass] = useState(false);
 
     const navigate = useNavigate();
@@ -20,7 +21,7 @@ const ChatProvider = (props)=>{
     },[navigate])
     
     return(
-        <ChatContext.Provider value={{user, setSelectedChat, chats, setChats, SelectedChat, notification, setNotification, forgotPass, setForgotPass}}>
+        <ChatContext.Provider value={{user, setSelectedChat, chats, setChats, SelectedChat, notification, setNotification, forgotPass, setForgotPass, loadingChat, setLoadingChat}}>
             {props.children}
         </ChatContext.Provider>
     )
