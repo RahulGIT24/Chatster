@@ -43,7 +43,7 @@ const server = app.listen(port, console.log("Listening on port " + port));
 const io = require('socket.io')(server, {
     pingTimeout: 60000,
     cors: {
-        origin: "https://chatster.onrender.com/"
+        origin: "*"
     }
 })
 
