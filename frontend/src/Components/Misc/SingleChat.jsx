@@ -19,7 +19,7 @@ import io from "socket.io-client";
 import Typing from "./Typing";
 import sent from "../../Assets/Audio/Sent.mp3"
 
-const ENDPOINT = "http://localhost:5000";
+const ENDPOINT = "https://chatster.onrender.com";
 var socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
