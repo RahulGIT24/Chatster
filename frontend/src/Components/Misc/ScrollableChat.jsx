@@ -23,6 +23,25 @@ const ScrollableChat = ({ messages }) => {
     return time;
   };
 
+  const getDay = (sendTime) => {
+    const timestamp = sendTime;
+
+    let dateObj = new Date(timestamp);
+    let month = dateObj.getUTCMonth() + 1; //months from 1-12
+    let day = dateObj.getUTCDate();
+    let year = dateObj.getUTCFullYear();
+
+    
+    let weekday = dateObj
+    .toLocaleString("en-us", { weekday: "long" })
+    .toString()
+    .split(" ")[0];
+
+    let send = weekday + ", " + day + "/" + month + "/" + year;
+    
+    return send;
+  };
+
   const { user } = ChatState();
   const containerRef = useRef(null);
 
@@ -49,28 +68,34 @@ const ScrollableChat = ({ messages }) => {
                 />
               </Tooltip>
             )}
-            <span
-              style={{
-                backgroundColor: `${
-                  m.sender._id === user.sendUser.id ? "purple" : "black"
-                }`,
-                marginLeft: isSameSenderMargin(
-                  messages,
-                  m,
-                  i,
-                  user.sendUser.id
-                ),
-                marginTop: isSameUser(messages, m, i, user.sendUser.id)
-                  ? 3
-                  : 10,
-                borderRadius: "20px",
-                padding: "5px 15px",
-                maxWidth: "75%",
-              }}
+            <Tooltip
+              placement="bottom-start"
+              hasArrow
+              label={getDay(m.createdAt)}
             >
-              {m.content}
-              <p style={{ fontSize: "0.7rem" }}>{time(m.createdAt)}</p>
-            </span>
+              <span
+                style={{
+                  backgroundColor: `${
+                    m.sender._id === user.sendUser.id ? "purple" : "black"
+                  }`,
+                  marginLeft: isSameSenderMargin(
+                    messages,
+                    m,
+                    i,
+                    user.sendUser.id
+                  ),
+                  marginTop: isSameUser(messages, m, i, user.sendUser.id)
+                    ? 3
+                    : 10,
+                  borderRadius: "20px",
+                  padding: "5px 15px",
+                  maxWidth: "75%",
+                }}
+              >
+                {m.content}
+                <p style={{ fontSize: "0.7rem" }}>{time(m.createdAt)}</p>
+              </span>
+            </Tooltip>
           </div>
         ))}
     </div>
