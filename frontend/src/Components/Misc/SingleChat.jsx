@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ChatState } from "../../Context/ChatProvider";
 import {
   Box,
+  Button,
   FormControl,
   IconButton,
   Input,
@@ -17,14 +18,16 @@ import axios from "axios";
 import ScrollableChat from "./ScrollableChat";
 import io from "socket.io-client";
 import Typing from "./Typing";
-import sent from "../../Assets/Audio/Sent.mp3"
+import sent from "../../Assets/Audio/Sent.mp3";
+import { IoSendSharp } from "react-icons/io5";
 
 const ENDPOINT = "https://chatster.onrender.com";
 var socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const toast = useToast();
-  const { user, SelectedChat, setSelectedChat, notification, setNotification } = ChatState();
+  const { user, SelectedChat, setSelectedChat, notification, setNotification } =
+    ChatState();
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState("");
@@ -32,9 +35,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [typing, setTyping] = useState(false);
   const [istyping, setIsTyping] = useState(false);
 
-  const sendSoundPlay = ()=>{
-    new Audio(sent).play()
-  }
+  const sendSoundPlay = () => {
+    new Audio(sent).play();
+  };
 
   const fetchMessages = async () => {
     if (!SelectedChat) return;
@@ -68,40 +71,48 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   };
 
   const sendMessage = async (e) => {
-    if (e.key === "Enter" && newMessage) {
-      socket.emit('stop typing', SelectedChat._id)
-      try {
-        const config = {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${user.sendUser.token}`,
-          },
-        };
-        setNewMessage("");
+    if(!newMessage){
+      toast({
+        title: "Enter a message",
+        status: "warning",
+        duration: 1000,
+        isClosable: true,
+        position: "bottom",
+      })
+      return;
+    }
+    socket.emit("stop typing", SelectedChat._id);
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.sendUser.token}`,
+        },
+      };
+      setNewMessage("");
 
-        const { data } = await axios.post(
-          `/api/message/`,
-          {
-            content: newMessage,
-            chatId: SelectedChat._id,
-          },
-          config
-        );
+      const { data } = await axios.post(
+        `/api/message/`,
+        {
+          content: newMessage,
+          chatId: SelectedChat._id,
+        },
+        config
+      );
 
-        sendSoundPlay();
-        socket.emit("new message", data);
-        setMessages([...messages, data]);
-        return;
-      } catch (error) {
-        toast({
-          title: "Not able to send messages",
-          status: "error",
-          duration: 5000,
-          isClosable: true,
-          position: "bottom",
-        });
-        return;
-      }
+      sendSoundPlay();
+      socket.emit("new message", data);
+      setMessages([...messages, data]);
+      return;
+    } catch (error) {
+      toast({
+        title: "Not able to send messages",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      return;
     }
   };
 
@@ -109,8 +120,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     socket = io(ENDPOINT);
     socket.emit("setup", user);
     socket.on("connected", () => setSocketConnected(true));
-    socket.on('typing',()=>setIsTyping(true))
-    socket.on('stop typing',()=>setIsTyping(false))
+    socket.on("typing", () => setIsTyping(true));
+    socket.on("stop typing", () => setIsTyping(false));
   }, []);
 
   useEffect(() => {
@@ -119,11 +130,11 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     selectedChatCompare = SelectedChat;
   }, [SelectedChat]);
 
-// TODO Fix notification bug
+  // TODO Fix notification bug
   useEffect(() => {
     socket.on("message recieved", (newMessageRecieved) => {
       if (
-        !selectedChatCompare || 
+        !selectedChatCompare ||
         selectedChatCompare._id !== newMessageRecieved.chat._id
       ) {
         if (!notification.includes(newMessageRecieved)) {
@@ -136,10 +147,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     });
   });
 
-
   const typingHandler = (e) => {
     setNewMessage(e.target.value);
-    
+
     if (!socketConnected) return;
 
     if (!typing) {
@@ -223,12 +233,11 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               />
             ) : (
               <>
-                  <ScrollableChat messages={messages} />
-                
+                <ScrollableChat messages={messages} />
               </>
             )}
-            <FormControl onKeyDown={sendMessage} isRequired mt={3}>
-              {istyping? <Typing/>:(<></>)}
+            <FormControl isRequired mt={3} style={{ display: "flex" }}>
+              {istyping ? <Typing /> : <></>}
               <Input
                 variant={"filled"}
                 bg="#E0E0E0"
@@ -236,6 +245,19 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 onChange={typingHandler}
                 value={newMessage}
               />
+              <Button
+                id="sendBTN"
+                onClick={sendMessage}
+                background={"purple"}
+                color={"white"}
+                border={"1px solid black"}
+                borderRadius={"51px"}
+                padding={"1rem 0"}
+                margin={"0 2px"}
+                _hover={{background:"black", borderColor:"purple"}}
+              >
+                <IoSendSharp />
+              </Button>
             </FormControl>
           </Box>
         </>
