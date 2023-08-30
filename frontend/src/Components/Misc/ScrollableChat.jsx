@@ -10,6 +10,19 @@ import { ChatState } from "../../Context/ChatProvider";
 import { useEffect, useRef } from "react";
 
 const ScrollableChat = ({ messages }) => {
+  const time = (sendTime) => {
+    const timestamp = sendTime;
+
+    const date = new Date(timestamp);
+
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+
+    const time = `${hours}:${minutes}`;
+
+    return time;
+  };
+
   const { user } = ChatState();
   const containerRef = useRef(null);
 
@@ -19,10 +32,10 @@ const ScrollableChat = ({ messages }) => {
   }, [messages]);
 
   return (
-    <div ref={containerRef} style={{ overflowY: "scroll",height: "60vh"}}>
+    <div ref={containerRef} style={{ overflowY: "scroll", height: "60vh" }}>
       {messages &&
         messages.map((m, i) => (
-          <div style={{ display: "flex", color:"white" }} key={m._id}>
+          <div style={{ display: "flex", color: "white" }} key={m._id}>
             {(isSameSender(messages, m, i, user.sendUser.id) ||
               isLastMessage(messages, i, user.sendUser.id)) && (
               <Tooltip label={m.sender.name} placement="bottom-start" hasArrow>
@@ -56,6 +69,7 @@ const ScrollableChat = ({ messages }) => {
               }}
             >
               {m.content}
+              <p style={{ fontSize: "0.7rem" }}>{time(m.createdAt)}</p>
             </span>
           </div>
         ))}
