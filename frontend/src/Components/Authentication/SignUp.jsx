@@ -97,6 +97,18 @@ const SignUp = () => {
       return;
     }
 
+    if(password.length<8){
+      toast({
+        title: "Password Length should be at least 8 characters",
+        status: "warning",
+        duration: 3000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setPicLoading(false);
+      return;
+    }
+
     try {
       const config = {
         headers: {
