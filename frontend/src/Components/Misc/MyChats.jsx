@@ -42,6 +42,13 @@ const MyChats = ({ fetchAgain }) => {
     fetchChats();
   }, [fetchAgain]);
 
+  function lastMsg(chat) {
+    const name = chat.latestMessage.sender._id === user.sendUser.id ? "You": chat.latestMessage.sender.name
+    const message = chat.latestMessage.content
+    return `${name}: ${message}`
+  }
+
+
   return (
     <Box
       display={{ base: SelectedChat ? "none" : "flex", md: "flex" }}
@@ -113,6 +120,7 @@ const MyChats = ({ fetchAgain }) => {
                       ? getSender(loggedUser, chat.users)
                       : chat.chatName}
                   </Text>
+                  <Text>{lastMsg(chat)}</Text>
                 </Box>
               );
             })}
