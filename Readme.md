@@ -19,7 +19,7 @@
 
 #### Starting the server
 
-1. Open terminal in root folder and run either `npm start`
+1. Open terminal in root folder and run `npm start`
 
 2. Open another terminal in frontend folder and run `npm run start`
 
