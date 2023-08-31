@@ -8,6 +8,7 @@ import {
   Input,
   Spinner,
   Text,
+  Textarea,
 } from "@chakra-ui/react";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import { getSender } from "../../config/ChatLogics";
@@ -71,14 +72,14 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   };
 
   const sendMessage = async (e) => {
-    if(!newMessage){
+    if (!newMessage) {
       toast({
         title: "Enter a message",
         status: "warning",
         duration: 1000,
         isClosable: true,
         position: "bottom",
-      })
+      });
       return;
     }
     socket.emit("stop typing", SelectedChat._id);
@@ -238,7 +239,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             )}
             <FormControl isRequired mt={3} style={{ display: "flex" }}>
               {istyping ? <Typing /> : <></>}
-              <Input
+              <Textarea
+                cols={1}
+                rows={1}
                 variant={"filled"}
                 bg="#E0E0E0"
                 placeholder="Type a message"
@@ -254,7 +257,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 borderRadius={"51px"}
                 padding={"1rem 0"}
                 margin={"0 2px"}
-                _hover={{background:"black", borderColor:"purple"}}
+                _hover={{ background: "black", borderColor: "purple" }}
               >
                 <IoSendSharp />
               </Button>
