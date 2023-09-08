@@ -18,7 +18,6 @@ import { useToast } from "@chakra-ui/react";
 import axios from "axios";
 import ScrollableChat from "./ScrollableChat";
 import io from "socket.io-client";
-import Typing from "./Typing";
 import sent from "../../Assets/Audio/Sent.mp3";
 import { IoSendSharp } from "react-icons/io5";
 
@@ -178,6 +177,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             fontSize={{ base: "28px", md: "30px" }}
             pb={3}
             px={2}
+            maxHeight={'5rem'}
+            minHeight={'5rem'}
             w="100%"
             fontFamily="Work sans"
             display="flex"
@@ -194,7 +195,16 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             />
             {SelectedChat.isGroupChat === false ? (
               <>
-                {getSender(user, SelectedChat.users)}
+                <Box>
+                  <p>{getSender(user, SelectedChat.users)}</p>
+                  <p>
+                    {istyping && (
+                      <Text fontSize={"20px"} textAlign={"center"}>
+                        Typing....
+                      </Text>
+                    )}
+                  </p>
+                </Box>
                 <ProfileModal
                   user={
                     SelectedChat.users[0]._id === user.sendUser.id
@@ -238,10 +248,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               </>
             )}
             <FormControl isRequired mt={3} style={{ display: "flex" }}>
-              {istyping ? <Typing /> : <></>}
-              <Textarea
-                cols={1}
-                rows={1}
+              <Input
                 variant={"filled"}
                 bg="#E0E0E0"
                 placeholder="Type a message"
