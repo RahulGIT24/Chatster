@@ -17,7 +17,6 @@ import { useToast } from "@chakra-ui/react";
 import axios from "axios";
 import ScrollableChat from "./ScrollableChat";
 import io from "socket.io-client";
-import Typing from "./Typing";
 import sent from "../../Assets/Audio/Sent.mp3";
 import { IoSendSharp } from "react-icons/io5";
 
