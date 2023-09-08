@@ -71,14 +71,14 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   };
 
   const sendMessage = async (e) => {
-    if(!newMessage){
+    if (!newMessage) {
       toast({
         title: "Enter a message",
         status: "warning",
         duration: 1000,
         isClosable: true,
         position: "bottom",
-      })
+      });
       return;
     }
     socket.emit("stop typing", SelectedChat._id);
@@ -193,7 +193,16 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             />
             {SelectedChat.isGroupChat === false ? (
               <>
-                {getSender(user, SelectedChat.users)}
+                <Box>
+                  <p>{getSender(user, SelectedChat.users)}</p>
+                  <p>
+                    {istyping && (
+                      <Text fontSize={"20px"} textAlign={"center"}>
+                        Typing....
+                      </Text>
+                    )}
+                  </p>
+                </Box>
                 <ProfileModal
                   user={
                     SelectedChat.users[0]._id === user.sendUser.id
@@ -236,8 +245,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 <ScrollableChat messages={messages} />
               </>
             )}
-            <FormControl isRequired mt={3} style={{ display: "flex" }}>
-              {istyping ? <Typing /> : <></>}
+            <FormControl isRequired mt={3} display={"flex"}>
               <Input
                 variant={"filled"}
                 bg="#E0E0E0"
@@ -254,7 +262,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 borderRadius={"51px"}
                 padding={"1rem 0"}
                 margin={"0 2px"}
-                _hover={{background:"black", borderColor:"purple"}}
+                _hover={{ background: "black", borderColor: "purple" }}
               >
                 <IoSendSharp />
               </Button>
