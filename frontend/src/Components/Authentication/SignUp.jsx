@@ -11,19 +11,19 @@ import React, { useState } from "react";
 import { useToast } from "@chakra-ui/react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { ChatState } from "../../Context/ChatProvider";
 
 const SignUp = () => {
+  const {picLoading, postDetails, pic} = ChatState();
   const navigate = useNavigate();
   let toast = useToast();
-  const [picLoading, setPicLoading] = useState(false);
+  const [loading, setloading] = useState(false);
 
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
   });
-
-  const [pic, setPic] = useState();
 
   // Destructuring form data
   const { name, email, password } = formData;
@@ -37,54 +37,10 @@ const SignUp = () => {
     }));
   };
 
-  const postDetails = (pics) => {
-    setPicLoading(true);
-    if (pics === undefined) {
-      toast({
-        title: "Please Select an Image!",
-        status: "warning",
-        duration: 5000,
-        isClosable: true,
-        position: "bottom",
-      });
-      setPicLoading(true);
-      return;
-    }
-    console.log(pics);
-    if (pics.type === "image/jpeg" || pics.type === "image/png") {
-      const data = new FormData();
-      data.append("file", pics);
-      data.append("upload_preset", "ChatApp");
-      data.append("cloud_name", "dzyhwodtq");
-      fetch("https://api.cloudinary.com/v1_1/dzyhwodtq/image/upload", {
-        method: "post",
-        body: data,
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          setPic(data.url.toString());
-          console.log(data.url.toString());
-          setPicLoading(false);
-        })
-        .catch((err) => {
-          console.log(err);
-          setPicLoading(false);
-        });
-    } else {
-      toast({
-        title: "Please Select an Image!",
-        status: "warning",
-        duration: 5000,
-        isClosable: true,
-        position: "bottom",
-      });
-      setPicLoading(false);
-      return;
-    }
-  };
+  
 
   const submitHandler = async () => {
-    setPicLoading(true);
+    setloading(true);
     if (!name || !email || !password) {
       toast({
         title: "Please Fill All the details",
@@ -93,7 +49,7 @@ const SignUp = () => {
         isClosable: true,
         position: "bottom",
       });
-      setPicLoading(false);
+      setloading(false);
       return;
     }
 
@@ -105,7 +61,7 @@ const SignUp = () => {
         isClosable: true,
         position: "bottom",
       });
-      setPicLoading(false);
+      setloading(false);
       return;
     }
 
@@ -134,7 +90,7 @@ const SignUp = () => {
         position: "bottom",
       });
       localStorage.setItem("userInfo", JSON.stringify(data));
-      setPicLoading(false);
+      setloading(false);
       navigate("/chats");
     } catch (error) {
       toast({
@@ -145,7 +101,7 @@ const SignUp = () => {
         isClosable: true,
         position: "bottom",
       });
-      setPicLoading(false);
+      setloading(false);
     }
   };
 
@@ -212,7 +168,7 @@ const SignUp = () => {
         width={"100%"}
         style={{ marginTop: 15 }}
         onClick={submitHandler}
-        isLoading={picLoading}
+        isLoading={loading || picLoading}
       >
         Sign Up
       </Button>
