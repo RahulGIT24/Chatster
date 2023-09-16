@@ -16,4 +16,20 @@ router.get("/", protect, async (req, res) => {
     res.send(users);
 })
 
+router.put("/changeName/:id", protect, async (req, res) => {
+    try {
+        const id = req.params.id;
+        const user = await User.findById(id);
+
+        if (!user) {
+            return res.status(401).send("User not found");
+        }
+
+        await User.findByIdAndUpdate(id, { name: req.body.name }, { new: true });
+        return res.status(200).send("Name updated successfully")
+    } catch (e) {
+        res.status(500).send("Internal Server Error")
+    }
+})
+
 module.exports = router;
