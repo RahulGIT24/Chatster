@@ -69,7 +69,7 @@ const ChatProvider = (props) => {
 
 
     return (
-        <ChatContext.Provider value={{ user, setSelectedChat, chats, setChats, SelectedChat, notification, setNotification, forgotPass, setForgotPass, loadingChat, setLoadingChat, pic, postDetails, picLoading }}>
+        <ChatContext.Provider value={{ user, setSelectedChat, chats, setChats, SelectedChat, notification, setNotification, forgotPass, setForgotPass, loadingChat, setLoadingChat, pic, postDetails, picLoading, setPic }}>
             {props.children}
         </ChatContext.Provider>
     )

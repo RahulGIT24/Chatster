@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { ChatState } from "../../Context/ChatProvider";
 
 const SignUp = () => {
-  const {picLoading, postDetails, pic} = ChatState();
+  const {picLoading, postDetails, pic, setPic} = ChatState();
   const navigate = useNavigate();
   let toast = useToast();
   const [loading, setloading] = useState(false);
@@ -91,6 +91,7 @@ const SignUp = () => {
       });
       localStorage.setItem("userInfo", JSON.stringify(data));
       setloading(false);
+      setPic("");
       navigate("/chats");
     } catch (error) {
       toast({
@@ -159,7 +160,7 @@ const SignUp = () => {
           bg={"black"}
           color={"purple"}
           borderColor={"purple"}
-        ></Input>
+        />
       </FormControl>
       <Button
         className="btn"
