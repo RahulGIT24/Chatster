@@ -3,9 +3,9 @@ import { ChatState } from "../../Context/ChatProvider";
 import { Box, Button, Stack, Text, useToast } from "@chakra-ui/react";
 import axios from "axios";
 import { AddIcon } from "@chakra-ui/icons";
-import ChatLoading from "./ChatLoading";
+import ChatLoading from "../Misc/ChatLoading";
 import { getSender } from "../../config/ChatLogics";
-import GroupChatModal from "./GroupChatModal";
+import GroupChatModal from "../Misc/GroupChatModal";
 
 const MyChats = ({ fetchAgain }) => {
   const [loggedUser, setLoggedUser] = useState();

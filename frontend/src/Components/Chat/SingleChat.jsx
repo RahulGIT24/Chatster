@@ -12,8 +12,8 @@ import {
 } from "@chakra-ui/react";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import { getSender } from "../../config/ChatLogics";
-import ProfileModal from "./ProfileModal";
-import UpdateGroupChatModal from "./UpdateGroupChatModal";
+import ProfileModal from "../Misc/ProfileModal";
+import UpdateGroupChatModal from "../Misc/UpdateGroupChatModal";
 import { useToast } from "@chakra-ui/react";
 import axios from "axios";
 import ScrollableChat from "./ScrollableChat";
