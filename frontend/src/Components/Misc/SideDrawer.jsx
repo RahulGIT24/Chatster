@@ -18,7 +18,7 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import axios from "axios";
 import { BiSearch } from "react-icons/bi";
 import { ChevronDownIcon } from "@chakra-ui/icons";
@@ -33,14 +33,13 @@ const SideDrawer = () => {
   const [search, setSearch] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
-  
-  const {
-    user,
-    setSelectedChat,
-    chats,
-    setChats,
-    setLoadingChat
-  } = ChatState();
+  const { user, setSelectedChat, chats, setChats, setLoadingChat } =
+    ChatState();
+  const [pic, setPic] = useState(user.sendUser.pic);
+  useMemo(
+    () => setPic(JSON.parse(localStorage.getItem("userInfo")).sendUser.pic),
+    [localStorage.getItem("userInfo")]
+  );
 
   const toast = useToast();
   const navigate = useNavigate();
@@ -216,7 +215,7 @@ const SideDrawer = () => {
                 size={"sm"}
                 cursor={"pointer"}
                 name={user.sendUser.name}
-                src={user.sendUser.pic}
+                src={pic}
               />
             </MenuButton>
             <MenuList
@@ -283,11 +282,11 @@ const SideDrawer = () => {
             ) : (
               searchResults?.map((user) => {
                 return (
-                    <UserListItem
-                      key={user._id}
-                      user={user}
-                      handleFunction={() => accessChat(user._id)}
-                    />
+                  <UserListItem
+                    key={user._id}
+                    user={user}
+                    handleFunction={() => accessChat(user._id)}
+                  />
                 );
               })
             )}

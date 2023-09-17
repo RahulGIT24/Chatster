@@ -3,7 +3,7 @@ import { useDisclosure } from "@chakra-ui/hooks";
 import { ViewIcon, EditIcon } from "@chakra-ui/icons";
 import { Image } from "@chakra-ui/image";
 import { Text } from "@chakra-ui/layout";
-import UpdateNameModal from "./UpdateNameModal";
+import UpdateDetailsModal from "./UpdateDetailsModal";
 import {
   Modal,
   ModalBody,
@@ -17,9 +17,15 @@ import React, { useMemo, useState } from "react";
 
 const ProfileModal = ({ user, children }) => {
   const [name, setName] = useState(user.name);
+  const [pic, setPic] = useState(user.pic)
   const loggedUser = JSON.parse(localStorage.getItem("userInfo")).sendUser.id;
-  const updateName = useMemo(
+
+  useMemo(
     () => setName(JSON.parse(localStorage.getItem("userInfo")).sendUser.name),
+    [localStorage.getItem("userInfo")]
+  );
+  useMemo(
+    () => setPic(JSON.parse(localStorage.getItem("userInfo")).sendUser.pic),
     [localStorage.getItem("userInfo")]
   );
 
@@ -52,11 +58,6 @@ const ProfileModal = ({ user, children }) => {
             alignItems={"center"}
           >
             {loggedUser === user.id ? `${name}` : `${user.name}`}
-            {loggedUser === user.id && (
-              <UpdateNameModal user={user} off={onClose}>
-                <EditIcon marginLeft={"12px"} cursor={"pointer"} />
-              </UpdateNameModal>
-            )}
           </ModalHeader>
 
           <ModalCloseButton />
@@ -69,9 +70,28 @@ const ProfileModal = ({ user, children }) => {
             <Image
               borderRadius={"full"}
               boxSize={"150px"}
-              src={user.pic}
+              src={loggedUser === user.id ? `${pic}`:`${user.pic}`}
               alt={user.name}
             />
+            {loggedUser === user.id && (
+              <>
+                <UpdateDetailsModal user={user} off={onClose}>
+                  <Button
+                    bg={"black"}
+                    color={"purple"}
+                    border={"1px"}
+                    borderRadius={"2rem"}
+                    _hover={{ bg: "white" }}
+                    mt={"0.5rem"}
+                    mb={"1rem"}
+                    paddingX={"16px"}
+                  >
+                    <span style={{ marginRight: "12px" }}>Update Profile </span>
+                    <EditIcon />
+                  </Button>
+                </UpdateDetailsModal>
+              </>
+            )}
             <Text fontSize={"2xl"}>
               <b>{user.email}</b>
             </Text>

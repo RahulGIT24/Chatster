@@ -1,6 +1,6 @@
 import { Button } from "@chakra-ui/button";
 import { useDisclosure } from "@chakra-ui/hooks";
-import { VStack } from "@chakra-ui/react";
+import { FormControl, FormLabel, VStack } from "@chakra-ui/react";
 import {
   Modal,
   ModalBody,
@@ -13,10 +13,10 @@ import { useToast } from "@chakra-ui/react";
 import { Input } from "@chakra-ui/react";
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { ChatState } from "../../Context/ChatProvider";
 
-const UpdateNameModal = ({ children, user, off }) => {
-  const navigate = useNavigate();
+const UpdateDetailsModal = ({ children, user, off }) => {
+  const { postDetails, picLoading, pic, setPic } = ChatState();
   const toast = useToast();
   const loggedUser = JSON.parse(localStorage.getItem("userInfo")).sendUser.id;
   const [name, setName] = useState("");
@@ -27,14 +27,15 @@ const UpdateNameModal = ({ children, user, off }) => {
   };
 
   const handleClick = async () => {
-    if (!name) {
+    if (!name && !pic) {
       toast({
-        title: "Please enter a name",
+        title: "Please Upload Sufficient Details",
         status: "warning",
         duration: 2000,
         isClosable: true,
         position: "bottom",
       });
+      return;
     }
     try {
       const config = {
@@ -44,17 +45,26 @@ const UpdateNameModal = ({ children, user, off }) => {
         },
       };
 
+      setLoading(true);
       await axios.put(
         `/api/user/changeName/${loggedUser}`,
         {
           name: name,
+          pic: pic,
         },
         config
       );
 
       const info = JSON.parse(localStorage.getItem("userInfo"));
       let oldData = info.sendUser;
-      oldData.name = name;
+      if (name && pic) {
+        oldData.name = name;
+        oldData.pic = pic;
+      } else if (name) {
+        oldData.name = name;
+      } else if (pic) {
+        oldData.pic = pic;
+      }
       localStorage.setItem(
         "userInfo",
         JSON.stringify({ sendUser: oldData, success: info.success })
@@ -63,8 +73,9 @@ const UpdateNameModal = ({ children, user, off }) => {
       setLoading(false);
       onClose();
       off();
+      setPic("");
       toast({
-        title: "Name updated successfully!",
+        title: "Details updated successfully!",
         status: "success",
         duration: 2000,
         isClosable: true,
@@ -103,7 +114,7 @@ const UpdateNameModal = ({ children, user, off }) => {
             justifyContent={"center"}
             alignItems={"center"}
           >
-            Update Your Name
+            Update Your Details
           </ModalHeader>
 
           <ModalCloseButton />
@@ -111,20 +122,36 @@ const UpdateNameModal = ({ children, user, off }) => {
             display={"flex"}
             justifyContent={"center"}
             alignItems={"center"}
+            flexDirection={"column"}
             pb={"2rem"}
           >
             <VStack spacing={"5px"}>
-              <Input
-                placeholder="Enter your name"
-                onChange={onChange}
-                borderColor={"purple"}
-              />
+              <FormControl id="pic" margin={"12px 0"}>
+                <FormLabel>Name</FormLabel>
+                <Input
+                  placeholder="Enter your name"
+                  onChange={onChange}
+                  borderColor={"purple"}
+                />
+              </FormControl>
+              <FormControl id="pic" margin={"12px 0"}>
+                <FormLabel>Profile Picture</FormLabel>
+                <Input
+                  type="file"
+                  p={1.5}
+                  accept="image/"
+                  onChange={(e) => postDetails(e.target.files[0])}
+                  bg={"black"}
+                  color={"purple"}
+                  borderColor={"purple"}
+                />
+              </FormControl>
             </VStack>
             <Button
               ml={3}
               color={"purple"}
               bg={"black"}
-              isLoading={loading}
+              isLoading={loading || picLoading}
               onClick={handleClick}
             >
               Update
@@ -136,4 +163,4 @@ const UpdateNameModal = ({ children, user, off }) => {
   );
 };
 
-export default UpdateNameModal;
+export default UpdateDetailsModal;
