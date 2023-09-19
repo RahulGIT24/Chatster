@@ -47,7 +47,7 @@ const UpdateDetailsModal = ({ children, user, off }) => {
 
       setLoading(true);
       await axios.put(
-        `/api/user/changeName/${loggedUser}`,
+        `/api/user/changeDetail/${loggedUser}`,
         {
           name: name,
           pic: pic,
