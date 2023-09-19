@@ -1,8 +1,12 @@
+// Imports
 const mongoose = require("mongoose")
 const dotenv = require("dotenv");
 dotenv.config()
+
+// DB URL from .env file
 const URL = process.env.URL;
 
+// Function to connect DB
 const connectDB = async()=>{
     try {
         const con = await mongoose.connect(URL);
@@ -12,4 +16,5 @@ const connectDB = async()=>{
     }
 }
 
+// Exporting function
 module.exports = connectDB;

@@ -1,3 +1,4 @@
+// Imports
 const express = require('express');
 const protect = require('../middleware/authMiddleWare');
 const Chat = require("../models/ChatModel")
@@ -5,6 +6,7 @@ const User = require('../models/UserModel');
 
 const router = express.Router();
 
+// Route 1:- Fetches logged in user chats
 router.get("/", protect, async (req, res) => {
     try {
         Chat.find({ users: { $elemMatch: { $eq: req.user._id } } })
@@ -24,6 +26,7 @@ router.get("/", protect, async (req, res) => {
     }
 })
 
+// Route 2: Access Single Chat
 router.post("/", protect, async (req, res) => {
     try {
         const { userID } = req.body;
@@ -68,6 +71,7 @@ router.post("/", protect, async (req, res) => {
     }
 })
 
+// Route 3: Creating a group chat
 router.post("/group", protect, async (req, res) => {
     try {
         if (!req.body.users || !req.body.name) {
@@ -104,6 +108,7 @@ router.post("/group", protect, async (req, res) => {
     }
 })
 
+// Route 4: Rename group
 router.put("/rename", protect, async (req, res) => {
     try {
         const { chatID, chatName } = req.body;
@@ -116,6 +121,7 @@ router.put("/rename", protect, async (req, res) => {
 
 })
 
+// Route 4: Change Admin
 router.put("/changeAdmin", protect, async(req,res)=>{
     try {
         const { chatID, adminID } = req.body;
@@ -127,6 +133,7 @@ router.put("/changeAdmin", protect, async(req,res)=>{
     }
 })
 
+// Route 5: Removing users from group
 router.put("/groupRemove", protect, async (req, res) => {
     try {
         const { chatId, userId } = req.body;
@@ -145,6 +152,7 @@ router.put("/groupRemove", protect, async (req, res) => {
     }
 })
 
+// Route 6: Adding users to group
 router.put("/groupAdd", protect, async (req, res) => {
     try {
         const { chatId, userId } = req.body;

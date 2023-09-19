@@ -1,8 +1,3 @@
-// chatname
-// isgroupchat
-// users
-// latestmessage
-// groupadmin
 const mongoose = require('mongoose');
 
 const chatModel = mongoose.Schema(

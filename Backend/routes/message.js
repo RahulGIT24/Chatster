@@ -6,7 +6,7 @@ const Chat = require('../models/ChatModel');
 
 const router = express.Router();
 
-// TODO: Working fine for groupchat but not for single chat
+// Route 1: Sending Messages
 router.post('/', protect, async (req, res) => {
     const { content, chatId } = req.body;
 
@@ -35,6 +35,7 @@ router.post('/', protect, async (req, res) => {
     }
 })
 
+// Route 2: Fetching messages
 router.get('/:chatId', protect, async (req, res) => {
     try {
         const messages = await Message.find({ chat: req.params.chatId })
