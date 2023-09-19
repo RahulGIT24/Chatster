@@ -10,4 +10,4 @@ const otpSchema = new mongoose.Schema({
 )
 
 const OTP = mongoose.model('OTP', otpSchema,'OTP');
-module.exports = OTP; // Exporting UserSchema as user, a mongoose model
+module.exports = OTP; // Exporting OTP

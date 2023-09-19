@@ -1,3 +1,4 @@
+// Imports
 const express = require('express')
 const { body, validationResult } = require("express-validator")
 const dotenv = require("dotenv");
@@ -195,12 +196,6 @@ router.post("/validateOTP", [
 
     try {
         const user = await OTP.findOne({ email });
-
-        // Checking expiry time of OTP
-        // let diff = currentTime - user.expiryTime
-        // if (diff < 0) {
-        //     return res.status(400).json({ success, msg: "OTP Expired" })
-        // }
 
         const otpcompare = await bcrypt.compare(Obtainedotp, user.code)
 

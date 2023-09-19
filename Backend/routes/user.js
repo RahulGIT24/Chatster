@@ -3,6 +3,7 @@ const protect = require('../middleware/authMiddleWare');
 const User = require('../models/UserModel');
 const router = express.Router()
 
+// Route 1: Fetching users to create chat
 router.get("/", protect, async (req, res) => {
     const keyword = req.query.search ? {
         $or: [
@@ -16,7 +17,8 @@ router.get("/", protect, async (req, res) => {
     res.send(users);
 })
 
-router.put("/changeName/:id", protect, async (req, res) => {
+// Route 2: Route to change details
+router.put("/changeDetail/:id", protect, async (req, res) => {
     try {
         const id = req.params.id;
         let user = await User.findById(id);
