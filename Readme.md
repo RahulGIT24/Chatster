@@ -7,7 +7,7 @@
 3. Create group chats
 4. Realtime Chatting
 5. Add or remove users from the group
-
+6. User can change their details like name and profile pic
 
 ### Guide to set it up locally
 
