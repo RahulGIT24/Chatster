@@ -5,7 +5,6 @@ var cors = require("cors");
 const connectDB = require("./config/db")
 const path = require("path")
 const app = express();
-app.use(express.json())
 
 // Configuring port from .env file
 dotenv.config()
