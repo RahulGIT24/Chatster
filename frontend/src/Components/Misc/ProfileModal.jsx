@@ -66,6 +66,7 @@ const ProfileModal = ({ user, children }) => {
             justifyContent={"center"}
             alignItems={"center"}
             flexDirection={"column"}
+            marginBottom={'2rem'}
           >
             <Image
               borderRadius={"full"}
@@ -73,34 +74,18 @@ const ProfileModal = ({ user, children }) => {
               src={loggedUser === user.id ? `${pic}`:`${user.pic}`}
               alt={user.name}
             />
-            {loggedUser === user.id && (
-              <>
-                <UpdateDetailsModal user={user} off={onClose}>
-                  <Button
-                    bg={"black"}
-                    color={"purple"}
-                    border={"1px"}
-                    borderRadius={"2rem"}
-                    _hover={{ bg: "white" }}
-                    mt={"0.5rem"}
-                    mb={"1rem"}
-                    paddingX={"16px"}
-                  >
-                    <span style={{ marginRight: "12px" }}>Update Profile </span>
-                    <EditIcon />
-                  </Button>
-                </UpdateDetailsModal>
-              </>
-            )}
             <Text fontSize={"2xl"}>
               <b>{user.email}</b>
             </Text>
+            {/* <Text fontSize={"2xl"}>
+              <i>Account Type - {user.actype?user.actype:"Public"}</i>
+            </Text> */}
           </ModalBody>
-          <ModalFooter>
+          {/* <ModalFooter display={"flex"} justifyContent={"space-between"} alignItems={"center"}>
             <Button mr={3} onClick={onClose} color={"purple"} bg={"black"}>
               Close
             </Button>
-          </ModalFooter>
+          </ModalFooter> */}
         </ModalContent>
       </Modal>
     </>
