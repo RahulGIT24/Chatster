@@ -54,6 +54,7 @@ router.post("/createuser", [
                 name: user.name,
                 email: user.email,
                 pic: user.pic,
+                actype:"Public",
                 token
             }
             return res.json({ sendUser, success });
@@ -100,6 +101,7 @@ router.post("/login", [
             name: user.name,
             email: user.email,
             pic: user.pic,
+            actype:user.actype?user.actype:"Public",
             token
         }
         return res.json({ sendUser, success });

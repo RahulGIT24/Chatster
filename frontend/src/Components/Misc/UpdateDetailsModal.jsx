@@ -1,6 +1,13 @@
 import { Button } from "@chakra-ui/button";
 import { useDisclosure } from "@chakra-ui/hooks";
-import { FormControl, FormLabel, VStack } from "@chakra-ui/react";
+import {
+  FormControl,
+  FormLabel,
+  VStack,
+  Radio,
+  RadioGroup,
+  Stack,
+} from "@chakra-ui/react";
 import {
   Modal,
   ModalBody,
@@ -15,13 +22,14 @@ import React, { useState } from "react";
 import axios from "axios";
 import { ChatState } from "../../Context/ChatProvider";
 
-const UpdateDetailsModal = ({ children, user, off }) => {
+const UpdateDetailsModal = ({ children, user, off, type }) => {
   const { postDetails, picLoading, pic, setPic } = ChatState();
   const toast = useToast();
   const loggedUser = JSON.parse(localStorage.getItem("userInfo")).sendUser.id;
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [value, setValue] = useState(type === "Private" ? "false" : "true");
   const onChange = (e) => {
     setName(e.target.value);
   };
@@ -96,6 +104,52 @@ const UpdateDetailsModal = ({ children, user, off }) => {
     }
   };
 
+  const changeAccType = async () => {
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      setLoading(true);
+      await axios.put(
+        `/api/user/changeType/${loggedUser}`,
+        {
+          type: value == "true" ? true : false,
+        },
+        config
+      );
+      const info = JSON.parse(localStorage.getItem("userInfo"));
+      let oldData = info.sendUser;
+      oldData.actype = value == "true" ? "Private" : "Public";
+      localStorage.setItem(
+        "userInfo",
+        JSON.stringify({ sendUser: oldData, success: info.success })
+      );
+      setLoading(false);
+      toast({
+        title: "Account Type Updated Successfully",
+        status: "success",
+        duration: 2000,
+        isClosable: true,
+        position: "bottom",
+      });
+      return;
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: "Internal Server Error",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setLoading(false);
+      return;
+    }
+  };
+
   return (
     <>
       <span onClick={onOpen}>{children}</span>
@@ -134,7 +188,7 @@ const UpdateDetailsModal = ({ children, user, off }) => {
                   borderColor={"purple"}
                 />
               </FormControl>
-              <FormControl id="pic" margin={"12px 0"}>
+              <FormControl id="pic">
                 <FormLabel>Profile Picture</FormLabel>
                 <Input
                   type="file"
@@ -145,6 +199,29 @@ const UpdateDetailsModal = ({ children, user, off }) => {
                   color={"purple"}
                   borderColor={"purple"}
                 />
+              </FormControl>
+              <FormControl id="pic" margin={"12px 0"}>
+                <FormLabel>Account Type</FormLabel>
+                <RadioGroup onChange={setValue} value={value}>
+                  <Stack direction="row">
+                    <Radio
+                      value={"true"}
+                      name="false"
+                      colorScheme="purple"
+                      onClick={changeAccType}
+                    >
+                      Public
+                    </Radio>
+                    <Radio
+                      value={"false"}
+                      name="true"
+                      colorScheme="purple"
+                      onClick={changeAccType}
+                    >
+                      Private
+                    </Radio>
+                  </Stack>
+                </RadioGroup>
               </FormControl>
             </VStack>
             <Button
