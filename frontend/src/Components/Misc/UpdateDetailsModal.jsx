@@ -121,11 +121,10 @@ const UpdateDetailsModal = ({ children, user, off, type }) => {
         config
       );
       const info = JSON.parse(localStorage.getItem("userInfo"));
-      let oldData = info.sendUser;
-      oldData.actype = value == "true" ? "Private" : "Public";
+      let newActype = value == "true" ? "Private" : "Public";
       localStorage.setItem(
         "userInfo",
-        JSON.stringify({ sendUser: oldData, success: info.success })
+        JSON.stringify({ sendUser: info.sendUser, success: info.success, actype:newActype })
       );
       setLoading(false);
       toast({

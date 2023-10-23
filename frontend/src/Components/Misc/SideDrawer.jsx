@@ -242,7 +242,7 @@ const SideDrawer = () => {
               <UpdateDetailsModal
                 user={user.sendUser}
                 off={onClose}
-                type={user.sendUser.actype}
+                type={user.actype}
               >
                 <MenuItem
                   style={{
