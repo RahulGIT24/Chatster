@@ -22,7 +22,7 @@ router.put("/changeDetail/:id", protect, async (req, res) => {
     try {
         const id = req.params.id;
         let user = await User.findById(id);
-        const {name,pic} = req.body;
+        const { name, pic, type } = req.body;
 
         if (!user) {
             return res.status(401).send("User not found");
@@ -32,7 +32,7 @@ router.put("/changeDetail/:id", protect, async (req, res) => {
             return res.status(400).send("Please provide sufficient details")
         }
 
-        if(name && pic){
+        if (name && pic) {
             user.name = name;
             user.pic = pic;
             await User.findByIdAndUpdate(id, { $set: user }, { new: true });
@@ -55,6 +55,31 @@ router.put("/changeDetail/:id", protect, async (req, res) => {
 
     } catch (e) {
         res.status(500).send("Internal Server Error")
+    }
+})
+
+// Route 3: Change a/c type
+router.put("/changeType/:id", protect, async (req, res) => {
+    try {
+        const id = req.params.id;
+        let user = await User.findById(id);
+        if (!user) {
+            return res.status(401).send("User not found");
+        }
+        const { type } = req.body;
+        if (type === true) {
+            user.actype = "Private";
+            await User.findByIdAndUpdate(id, { $set: user }, { new: true });
+            return res.status(200).send("Account type updated successfully")
+        }
+        if (!type) {
+            user.actype = "Public";
+            await User.findByIdAndUpdate(id, { $set: user }, { new: true });
+            return res.status(200).send("Account type updated successfully")
+        }
+
+    } catch (error) {
+        res.status(500).send("Internal server error");
     }
 })
 
