@@ -27,6 +27,7 @@ import ProfileModal from "./ProfileModal";
 import { useNavigate } from "react-router";
 import ChatLoading from "./ChatLoading";
 import UserListItem from "../UserAvatar/UserListItem";
+import UpdateDetailsModal from "./UpdateDetailsModal";
 
 const SideDrawer = () => {
   const { onClose, isOpen, onOpen } = useDisclosure();
@@ -237,6 +238,22 @@ const SideDrawer = () => {
                   My Profile
                 </MenuItem>
               </ProfileModal>
+              <MenuDivider />
+              <UpdateDetailsModal
+                user={user.sendUser}
+                off={onClose}
+                type={user.sendUser.actype ? user.actype : "Public"}
+              >
+                <MenuItem
+                  style={{
+                    backgroundImage:
+                      "linear-gradient(to right top, #051937, #171228, #190a1a, #12040d, #000000)",
+                    color: "white",
+                  }}
+                >
+                  Update Profile
+                </MenuItem>
+              </UpdateDetailsModal>
               <MenuDivider />
               <MenuItem
                 onClick={logoutHandler}
