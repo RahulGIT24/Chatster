@@ -209,7 +209,7 @@ const UpdateDetailsModal = ({ children, user, off, type }) => {
                       colorScheme="purple"
                       onClick={changeAccType}
                     >
-                      Public
+                    <p onClick={changeAccType}>Public</p>
                     </Radio>
                     <Radio
                       value={"false"}
@@ -217,7 +217,7 @@ const UpdateDetailsModal = ({ children, user, off, type }) => {
                       colorScheme="purple"
                       onClick={changeAccType}
                     >
-                      Private
+                      <p onClick={changeAccType}>Private</p>
                     </Radio>
                   </Stack>
                 </RadioGroup>
