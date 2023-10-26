@@ -29,7 +29,7 @@ const UpdateDetailsModal = ({ children, user, off, type }) => {
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [value, setValue] = useState(type === "Private" ? "false" : "true");
+  const [value, setValue] = useState(type === "Public" ? "true" : "false");
   const onChange = (e) => {
     setName(e.target.value);
   };
