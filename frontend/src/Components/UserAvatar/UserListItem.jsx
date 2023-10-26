@@ -6,7 +6,7 @@ const UserListItem = ({ user, handleFunction }) => {
   const { loadingChat } = ChatState();
   return (
     <Box
-      id= {loadingChat ? "userItem":""}
+      id={loadingChat ? "userItem" : ""}
       onClick={handleFunction}
       cursor="pointer"
       bg="black"
@@ -35,6 +35,10 @@ const UserListItem = ({ user, handleFunction }) => {
         <Text fontSize="xs">
           <b>Email : </b>
           {user.email}
+        </Text>
+        <Text fontSize="xs">
+          <b>Account Type: </b>
+          {user.actype}
         </Text>
       </Box>
     </Box>

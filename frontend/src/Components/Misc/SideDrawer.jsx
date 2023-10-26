@@ -105,7 +105,7 @@ const SideDrawer = () => {
     return false;
   };
 
-  const accessChat = async (userID) => {
+  const accessChat = async (userID,actype) => {
     try {
       if (checkChat(userID)) {
         toast({
@@ -126,7 +126,21 @@ const SideDrawer = () => {
         },
       };
 
-      const { data } = await axios.post(`/api/chat`, { userID }, config);
+      if(actype === "Private"){
+        const { data } = await axios.post(`/api/chat`, { userID, isRejected:"Pending" }, config);
+        setChats([data, ...chats]);
+        setLoadingChat(false);
+        onClose();
+        toast({
+          title: "Request Send Successfully",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom-left",
+        });
+        return;
+      }
+      const { data } = await axios.post(`/api/chat`, { userID, isRejected:"No" }, config);
       setChats([data, ...chats]);
       setSelectedChat(data);
       setLoadingChat(false);
@@ -302,7 +316,7 @@ const SideDrawer = () => {
                   <UserListItem
                     key={user._id}
                     user={user}
-                    handleFunction={() => accessChat(user._id)}
+                    handleFunction={() => accessChat(user._id,user.actype)}
                   />
                 );
               })

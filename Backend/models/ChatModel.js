@@ -17,6 +17,15 @@ const chatModel = mongoose.Schema(
         groupAdmin: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User"
+        },
+        isRejected: {
+            type: String,
+            default:"Pending"
+        },
+        creator: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref:"User",
+            required:true
         }
     },
     {
