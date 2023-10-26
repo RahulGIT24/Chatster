@@ -173,7 +173,7 @@ router.put("/groupAdd", protect, async (req, res) => {
 // Route 7: If chat is accepted
 router.put("/accept-chat", protect, async (req, res) => {
     try {
-        const { chatId } = req.body;
+        const  {chatId}  = req.body;
         const findChat = await Chat.findById(chatId);
         if (!findChat) {
             res.status(400).send("Can't find Chat!");
@@ -188,9 +188,9 @@ router.put("/accept-chat", protect, async (req, res) => {
 })
 
 // Route 8: Reject chat
-router.delete("/reject-chat", protect, async (req, res) => {
+router.delete("/reject-chat/:id", protect, async (req, res) => {
     try {
-        const { chatId } = req.body;
+        const chatId  = req.params.id;
         const findChat = await Chat.findById(chatId);
         if (!findChat) {
             res.status(400).send("Can't find Chat!");

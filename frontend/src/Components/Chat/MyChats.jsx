@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { ChatState } from "../../Context/ChatProvider";
-import { Box, Button, Stack, Text, useToast } from "@chakra-ui/react";
+import { Box, Button, Stack, Text, Tooltip, useToast } from "@chakra-ui/react";
 import axios from "axios";
-import { AddIcon } from "@chakra-ui/icons";
+import { AddIcon, CloseIcon, CheckIcon } from "@chakra-ui/icons";
 import ChatLoading from "../Misc/ChatLoading";
 import { getSender } from "../../config/ChatLogics";
 import GroupChatModal from "../Misc/GroupChatModal";
@@ -37,10 +37,81 @@ const MyChats = ({ fetchAgain }) => {
     }
   };
 
+  // Function to accept a request
+  const accceptChat = async (chatId) => {
+    try {
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${user.sendUser.token}`,
+        },
+      };
+      await axios.put(`/api/chat/accept-chat/`,{chatId}, config);
+      fetchChats();
+      toast({
+        title: "Request Accepted",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom-left",
+      });
+      return;
+    } catch (e) {
+      toast({
+        title: "Error Occured",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom-left",
+      });
+      console.log(e.response)
+      return;
+    }
+  };
+
+  // Function to accept a request
+  const rejectChat = async (chatId) => {
+    try {
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${user.sendUser.token}`,
+        },
+      };
+      await axios.delete(`/api/chat/reject-chat/${chatId}`, config);
+      fetchChats();
+      toast({
+        title: "Request Rejected",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom-left",
+      });
+      return;
+    } catch (e) {
+      toast({
+        title: "Error Occured",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom-left",
+      });
+      console.log(e.response)
+      return;
+    }
+  };
+
   useEffect(() => {
     setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
     fetchChats();
   }, [fetchAgain]);
+
+  const selectChat = (chat) => {
+    if (chat.isRejected === "Pending") {
+      return;
+    }
+    setSelectedChat(chat);
+  };
 
   return (
     <Box
@@ -99,7 +170,9 @@ const MyChats = ({ fetchAgain }) => {
             {chats.map((chat) => {
               return (
                 <Box
-                  onClick={() => setSelectedChat(chat)}
+                  onClick={() => {
+                    selectChat(chat);
+                  }}
                   cursor={"pointer"}
                   color={"white"}
                   bg={SelectedChat === chat ? "purple" : "black"}
@@ -108,11 +181,61 @@ const MyChats = ({ fetchAgain }) => {
                   borderRadius={"lg"}
                   key={chat._id}
                 >
-                  <Text>
-                    {!chat.isGroupChat
-                      ? getSender(loggedUser, chat.users)
-                      : chat.chatName}
-                  </Text>
+                  <Box
+                    display={"flex"}
+                    justifyContent={"space-between"}
+                    alignItems={"center"}
+                  >
+                    <Box>
+                      <Text>
+                        {!chat.isGroupChat
+                          ? getSender(loggedUser, chat.users)
+                          : chat.chatName}
+                      </Text>
+                    </Box>
+                    {chat.isRejected === "Pending" &&
+                    chat.creator !== user.sendUser.id ? (
+                      <Box>
+                        <Tooltip label="Reject" hasArrow placement="bottom-end">
+                          <Button
+                            border={"1px"}
+                            borderColor={"purple"}
+                            backgroundColor={"black"}
+                            color={"white"}
+                            _hover={{ background: "purple", color: "black" }}
+                            cursor={"pointer"}
+                            onClick={() => {
+                              rejectChat(chat._id)
+                            }}
+                          >
+                            <CloseIcon />
+                          </Button>
+                        </Tooltip>
+                        <Tooltip label="Accept" hasArrow placement="bottom-end">
+                          <Button
+                            border={"1px"}
+                            borderColor={"purple"}
+                            backgroundColor={"black"}
+                            color={"white"}
+                            _hover={{ background: "purple", color: "black" }}
+                            cursor={"pointer"}
+                            onClick={() => {
+                              accceptChat(chat._id);
+                            }}
+                          >
+                            <CheckIcon />
+                          </Button>
+                        </Tooltip>
+                      </Box>
+                    ) : (
+                      ""
+                    )}
+                  </Box>
+                  <i>
+                    {chat.isRejected === "Pending" &&
+                      chat.creator === user.sendUser.id &&
+                      `(Pending)`}
+                  </i>
                 </Box>
               );
             })}
