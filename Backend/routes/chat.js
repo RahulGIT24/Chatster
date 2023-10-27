@@ -94,7 +94,9 @@ router.post("/group", protect, async (req, res) => {
                 chatName: req.body.name,
                 users: users,
                 isGroupChat: true,
-                groupAdmin: req.user
+                groupAdmin: req.user,
+                isRejected:"No",
+                creator:req.user._id
             })
 
             const fullGroupChat = await Chat.findOne({ _id: groupChat._id }).populate("users", "-password").populate("groupAdmin", "-password")
