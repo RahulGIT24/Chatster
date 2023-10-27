@@ -27,6 +27,7 @@ import ProfileModal from "./ProfileModal";
 import { useNavigate } from "react-router";
 import ChatLoading from "./ChatLoading";
 import UserListItem from "../UserAvatar/UserListItem";
+import UpdateDetailsModal from "./UpdateDetailsModal";
 
 const SideDrawer = () => {
   const { onClose, isOpen, onOpen } = useDisclosure();
@@ -104,7 +105,7 @@ const SideDrawer = () => {
     return false;
   };
 
-  const accessChat = async (userID) => {
+  const accessChat = async (userID,actype) => {
     try {
       if (checkChat(userID)) {
         toast({
@@ -125,7 +126,21 @@ const SideDrawer = () => {
         },
       };
 
-      const { data } = await axios.post(`/api/chat`, { userID }, config);
+      if(actype === "Private"){
+        const { data } = await axios.post(`/api/chat`, { userID, isRejected:"Pending" }, config);
+        setChats([data, ...chats]);
+        setLoadingChat(false);
+        onClose();
+        toast({
+          title: "Request Send Successfully",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom-left",
+        });
+        return;
+      }
+      const { data } = await axios.post(`/api/chat`, { userID, isRejected:"No" }, config);
       setChats([data, ...chats]);
       setSelectedChat(data);
       setLoadingChat(false);
@@ -238,6 +253,22 @@ const SideDrawer = () => {
                 </MenuItem>
               </ProfileModal>
               <MenuDivider />
+              <UpdateDetailsModal
+                user={user.sendUser}
+                off={onClose}
+                type={user.actype}
+              >
+                <MenuItem
+                  style={{
+                    backgroundImage:
+                      "linear-gradient(to right top, #051937, #171228, #190a1a, #12040d, #000000)",
+                    color: "white",
+                  }}
+                >
+                  Update Profile
+                </MenuItem>
+              </UpdateDetailsModal>
+              <MenuDivider />
               <MenuItem
                 onClick={logoutHandler}
                 style={{
@@ -285,7 +316,7 @@ const SideDrawer = () => {
                   <UserListItem
                     key={user._id}
                     user={user}
-                    handleFunction={() => accessChat(user._id)}
+                    handleFunction={() => accessChat(user._id,user.actype)}
                   />
                 );
               })

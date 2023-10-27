@@ -29,7 +29,7 @@ router.get("/", protect, async (req, res) => {
 // Route 2: Access Single Chat
 router.post("/", protect, async (req, res) => {
     try {
-        const { userID } = req.body;
+        const { userID, isRejected } = req.body;
 
         if (!userID) {
             return res.status(400).send("Chat not exist")
@@ -53,7 +53,9 @@ router.post("/", protect, async (req, res) => {
             var chatData = {
                 chatName: "sender",
                 isGroupChat: false,
-                users: [req.user._id, userID]
+                users: [req.user._id, userID],
+                isRejected,
+                creator: req.user._id
             }
 
             try {
@@ -81,11 +83,11 @@ router.post("/group", protect, async (req, res) => {
         var users = JSON.parse(req.body.users);
 
         if (users.length < 2) {
-          return res
-            .status(400)
-            .send("More than 2 users are required to form a group chat");
+            return res
+                .status(400)
+                .send("More than 2 users are required to form a group chat");
         }
-      
+
         users.push(req.user);
         try {
             const groupChat = await Chat.create({
@@ -122,7 +124,7 @@ router.put("/rename", protect, async (req, res) => {
 })
 
 // Route 4: Change Admin
-router.put("/changeAdmin", protect, async(req,res)=>{
+router.put("/changeAdmin", protect, async (req, res) => {
     try {
         const { chatID, adminID } = req.body;
 
@@ -164,6 +166,40 @@ router.put("/groupAdd", protect, async (req, res) => {
         res.status(200).send(added)
     } catch (e) {
         res.status(400).send("Error while adding new user!")
+    }
+})
+
+
+// Route 7: If chat is accepted
+router.put("/accept-chat", protect, async (req, res) => {
+    try {
+        const  {chatId}  = req.body;
+        const findChat = await Chat.findById(chatId);
+        if (!findChat) {
+            res.status(400).send("Can't find Chat!");
+            return;
+        }
+        findChat.isRejected = "Accepted";
+        await Chat.findByIdAndUpdate(chatId, { $set: findChat }, { new: true });
+        return res.status(200).send("Chat Accepted!")
+    } catch (e) {
+        res.status(400).send("Error while aceepting!")
+    }
+})
+
+// Route 8: Reject chat
+router.delete("/reject-chat/:id", protect, async (req, res) => {
+    try {
+        const chatId  = req.params.id;
+        const findChat = await Chat.findById(chatId);
+        if (!findChat) {
+            res.status(400).send("Can't find Chat!");
+            return;
+        }
+        await Chat.findByIdAndDelete(chatId);
+        return res.status(200).send("Chat Rejected!")
+    } catch (e) {
+        res.status(400).send("Error while Rejecting!")
     }
 })
 

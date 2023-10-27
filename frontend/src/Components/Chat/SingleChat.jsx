@@ -8,7 +8,6 @@ import {
   Input,
   Spinner,
   Text,
-  Textarea,
 } from "@chakra-ui/react";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import { getSender } from "../../config/ChatLogics";

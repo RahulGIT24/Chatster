@@ -56,7 +56,7 @@ router.post("/createuser", [
                 pic: user.pic,
                 token
             }
-            return res.json({ sendUser, success });
+            return res.json({ sendUser, success, actype:"Public" });
         } catch (e) {
             console.error(e.message);
             return res.status(500).send("Internal Server Error"); // In case of errors
@@ -102,7 +102,8 @@ router.post("/login", [
             pic: user.pic,
             token
         }
-        return res.json({ sendUser, success });
+        const actype = user.actype?user.actype:"Public";
+        return res.json({ sendUser, success, actype});
     } catch (error) {
         console.log(error);
         return res.status(500).send("Internal Server Error"); // In case of errors
