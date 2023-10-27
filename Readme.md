@@ -1,4 +1,4 @@
-## A `MERN Stack` Chat Application create using `Socket.io` and `Chakra UI`
+## A `MERN Stack` Chat Application created using `Socket.io` and `Chakra UI`
 
 ### Features Added till now
 
