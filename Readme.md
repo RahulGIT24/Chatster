@@ -8,6 +8,7 @@
 4. Realtime Chatting
 5. Add or remove users from the group
 6. User can change their details like name and profile pic
+7. User can make their profile public/private
 
 ### Guide to set it up locally
 
