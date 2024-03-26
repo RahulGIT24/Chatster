@@ -18,6 +18,7 @@ import axios from "axios";
 import ScrollableChat from "./ScrollableChat";
 import io from "socket.io-client";
 import sent from "../../Assets/Audio/Sent.mp3";
+import recieve from "../../Assets/Audio/recieve.mp3";
 import { IoSendSharp } from "react-icons/io5";
 
 const ENDPOINT = "https://chatster.onrender.com";
@@ -34,8 +35,12 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [typing, setTyping] = useState(false);
   const [istyping, setIsTyping] = useState(false);
 
-  const sendSoundPlay = () => {
-    new Audio(sent).play();
+  const soundPlay = (s) => {
+    if (s) {
+      new Audio(sent).play();
+    } else {
+      new Audio(recieve).play();
+    }
   };
 
   const fetchMessages = async () => {
@@ -99,7 +104,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         config
       );
 
-      sendSoundPlay();
+      soundPlay(true);
       socket.emit("new message", data);
       setMessages([...messages, data]);
       return;
@@ -129,6 +134,10 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     selectedChatCompare = SelectedChat;
   }, [SelectedChat]);
 
+  useEffect(() => {
+    setNewMessage("");
+  }, [SelectedChat]);
+
   // TODO Fix notification bug
   useEffect(() => {
     socket.on("message recieved", (newMessageRecieved) => {
@@ -142,6 +151,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         }
       } else {
         setMessages([...messages, newMessageRecieved]);
+        soundPlay(false);
       }
     });
   });
@@ -172,12 +182,12 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     <>
       {SelectedChat ? (
         <>
-          <Text
+          <Box
             fontSize={{ base: "28px", md: "30px" }}
             pb={3}
             px={2}
-            maxHeight={'5rem'}
-            minHeight={'5rem'}
+            maxHeight={"5rem"}
+            minHeight={"5rem"}
             w="100%"
             fontFamily="Work sans"
             display="flex"
@@ -221,7 +231,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 />
               </>
             )}
-          </Text>
+          </Box>
           <Box
             display="flex"
             flexDir="column"

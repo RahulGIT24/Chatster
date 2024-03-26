@@ -64,7 +64,6 @@ const MyChats = ({ fetchAgain }) => {
         isClosable: true,
         position: "bottom-left",
       });
-      console.log(e.response)
       return;
     }
   };
@@ -96,7 +95,6 @@ const MyChats = ({ fetchAgain }) => {
         isClosable: true,
         position: "bottom-left",
       });
-      console.log(e.response)
       return;
     }
   };

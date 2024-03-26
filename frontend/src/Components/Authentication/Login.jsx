@@ -126,8 +126,8 @@ const SignUp = () => {
           </InputRightElement>
         </InputGroup>
       </FormControl>
-      <Text id="forgotPass">
         <Text
+        id="forgotPass"
           style={{ cursor: "pointer" }}
           onClick={() => {
             setForgotPass(true);
@@ -135,7 +135,6 @@ const SignUp = () => {
         >
           Forgot Password ?
         </Text>
-      </Text>
       <Button
         className="btn"
         bg={"purple"}

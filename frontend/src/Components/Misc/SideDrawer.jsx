@@ -21,21 +21,24 @@ import {
 import React, { useMemo, useState } from "react";
 import axios from "axios";
 import { BiSearch } from "react-icons/bi";
-import { ChevronDownIcon } from "@chakra-ui/icons";
+import { BellIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import { ChatState } from "../../Context/ChatProvider";
 import ProfileModal from "./ProfileModal";
 import { useNavigate } from "react-router";
 import ChatLoading from "./ChatLoading";
 import UserListItem from "../UserAvatar/UserListItem";
 import UpdateDetailsModal from "./UpdateDetailsModal";
+import NotificationBadge from "../Misc/NotificationBadge"
+import {getSender} from "../../config/ChatLogics"
 
 const SideDrawer = () => {
   const { onClose, isOpen, onOpen } = useDisclosure();
   const [search, setSearch] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
-  const { user, setSelectedChat, chats, setChats, setLoadingChat } =
+  const { user, setSelectedChat, chats, setChats, setLoadingChat,notification,setNotification } =
     ChatState();
+    console.log(notification)
   const [pic, setPic] = useState(user.sendUser.pic);
   useMemo(
     () => setPic(JSON.parse(localStorage.getItem("userInfo")).sendUser.pic),
@@ -46,6 +49,8 @@ const SideDrawer = () => {
   const navigate = useNavigate();
 
   const logoutHandler = () => {
+    setChats([])
+    setSelectedChat();
     localStorage.removeItem("userInfo");
     navigate("/");
   };
@@ -192,7 +197,7 @@ const SideDrawer = () => {
           Chat'Ster
         </Text>
         <div>
-          {/* <Menu>
+          <Menu>
             <MenuButton paddingRight={2}>
               <NotificationBadge count={notification.length}>
                 <BellIcon fontSize="2xl" m={1} />
@@ -215,7 +220,7 @@ const SideDrawer = () => {
                 </MenuItem>
               ))}
             </MenuList>
-          </Menu> */}
+          </Menu>
           <Menu>
             <MenuButton
               as={Button}

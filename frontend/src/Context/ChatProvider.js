@@ -51,7 +51,6 @@ const ChatProvider = (props) => {
                     setPicLoading(false);
                 })
                 .catch((err) => {
-                    console.log(err);
                     setPicLoading(false);
                 });
         } else {

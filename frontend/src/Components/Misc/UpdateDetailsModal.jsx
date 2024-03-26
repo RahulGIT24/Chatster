@@ -91,7 +91,6 @@ const UpdateDetailsModal = ({ children, user, off, type }) => {
       });
       return;
     } catch (error) {
-      console.log(error);
       toast({
         title: "Internal Server Error",
         status: "error",
@@ -136,7 +135,6 @@ const UpdateDetailsModal = ({ children, user, off, type }) => {
       });
       return;
     } catch (error) {
-      console.log(error);
       toast({
         title: "Internal Server Error",
         status: "error",

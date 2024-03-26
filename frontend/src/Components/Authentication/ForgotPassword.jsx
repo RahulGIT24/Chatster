@@ -317,8 +317,8 @@ const ForgotPassword = () => {
           >
             Change Password
           </Button>
-          <Text id="forgotPass">
             <Text
+            id="forgotPass"
               style={{ cursor: "pointer", margin:"7px 0px" }}
               onClick={() => {
                 setForgotPass(false);
@@ -326,7 +326,6 @@ const ForgotPassword = () => {
             >
               Login Instead
             </Text>
-          </Text>
         </VStack>
       </Box>
     </Container>
