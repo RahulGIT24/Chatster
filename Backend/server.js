@@ -5,6 +5,8 @@ var cors = require("cors");
 const connectDB = require("./config/db")
 const path = require("path")
 const app = express();
+const axios  = require('axios')
+const cron = require('node-cron')   
 
 // Configuring port from .env file
 dotenv.config()
@@ -22,6 +24,23 @@ app.use('/api/auth', require("./routes/auth"))
 app.use('/api/user', require("./routes/user"))
 app.use('/api/chat', require("./routes/chat"))
 app.use('/api/message', require("./routes/message"))
+
+app.get("/health", (req, res) => {
+    res.status(200).json({ message: "Health is Good" });
+});
+
+const checkHealth = async () => {
+    try {
+        const res = await axios.get(`${process.env.DOMAIN}/health`);
+        console.log(res.data.message);
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+cron.schedule("* * * * *", async () => {
+    await checkHealth()
+});
 
 // -------------------------------- Deployment --------------------------------
 
