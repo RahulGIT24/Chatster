@@ -38,7 +38,7 @@ const checkHealth = async () => {
     }
 };
 
-cron.schedule("* * * * *", async () => {
+cron.schedule("*/5 * * * *", async () => {
     await checkHealth()
 });
 
